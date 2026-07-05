@@ -17,10 +17,10 @@ export function Header() {
   return (
     <>
       <TopBanner />
-      <header className="sticky top-0 z-40 border-b border-ink/10 bg-cream/90 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-cream/10 bg-ink/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-2 sm:px-8">
         <Link href="/" aria-label="AI Pro Agency, retour à l'accueil">
-          <Logo />
+          <Logo variant="light" />
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
@@ -29,8 +29,8 @@ export function Header() {
               key={link.href}
               href={link.href}
               className={clsx(
-                "font-script text-lg font-bold transition-colors hover:text-accent-dark",
-                pathname === link.href ? "text-accent-dark" : "text-ink-soft"
+                "font-script text-lg font-bold transition-colors hover:text-cream",
+                pathname === link.href ? "text-cream" : "text-cream/60"
               )}
             >
               {link.label}
@@ -41,19 +41,23 @@ export function Header() {
         <div className="hidden items-center gap-4 lg:flex">
           <a
             href={CONTACT.phoneHref}
-            className="font-script flex items-center gap-2 text-lg font-bold text-ink-soft hover:text-accent-dark"
+            className="font-script flex items-center gap-2 text-lg font-bold text-cream/60 hover:text-cream"
           >
             <Phone size={16} />
             {CONTACT.phone}
           </a>
-          <Button href="/tarifs" variant="secondary" className="px-5 py-2.5">
+          <Button
+            href="/tarifs"
+            variant="secondary"
+            className="border border-cream !bg-cream px-5 py-2.5 !text-ink hover:!bg-transparent hover:!text-cream"
+          >
             Voir le prix
           </Button>
         </div>
 
         <button
           aria-label="Ouvrir le menu"
-          className="flex items-center justify-center rounded-full p-2 text-ink lg:hidden"
+          className="flex items-center justify-center rounded-full p-2 text-cream lg:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X size={24} /> : <Menu size={24} />}
@@ -61,7 +65,7 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-ink/10 bg-cream lg:hidden">
+        <div className="border-t border-cream/10 bg-ink lg:hidden">
           <nav className="flex flex-col gap-1 px-5 py-4">
             {NAV_LINKS.map((link) => (
               <Link
@@ -71,8 +75,8 @@ export function Header() {
                 className={clsx(
                   "font-script rounded-lg px-3 py-3 text-xl font-bold",
                   pathname === link.href
-                    ? "bg-ink/5 text-accent-dark"
-                    : "text-ink-soft"
+                    ? "bg-cream/10 text-cream"
+                    : "text-cream/60"
                 )}
               >
                 {link.label}
@@ -80,7 +84,7 @@ export function Header() {
             ))}
             <a
               href={CONTACT.phoneHref}
-              className="font-script mt-2 flex items-center gap-2 rounded-lg px-3 py-3 text-xl font-bold text-ink"
+              className="font-script mt-2 flex items-center gap-2 rounded-lg px-3 py-3 text-xl font-bold text-cream"
             >
               <Phone size={18} />
               {CONTACT.phone}

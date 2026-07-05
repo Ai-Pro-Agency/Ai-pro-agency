@@ -16,7 +16,7 @@ import { FloatingFlower } from "@/components/ui/FloatingFlower";
 import { CONTACT, whatsappHref } from "@/lib/constants";
 import { DEMO_PROJECTS } from "@/lib/projects";
 
-const HERO_FRAME_COUNT = 240;
+const HERO_FRAME_COUNT = 477;
 
 const HERO_PANELS: ScrollVideoPanel[] = [
   {

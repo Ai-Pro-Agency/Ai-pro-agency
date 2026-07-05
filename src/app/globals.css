@@ -1,26 +1,177 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf7f2;
+  --foreground: #17140f;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-fraunces);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-ink: #17140f;
+  --color-ink-soft: #3a352c;
+  --color-cream: #faf7f2;
+  --color-cream-dark: #f0e9dd;
+  --color-accent: #b2685f;
+  --color-accent-dark: #8f4f47;
+  --color-accent-light: #d9a29a;
+  --color-accent-rose: var(--color-green);
+
+  /* Palette terre élargie */
+  --color-beige: #e8dcc8;
+  --color-beige-dark: #d9c8a9;
+  --color-brown: #6b4a34;
+  --color-brown-dark: #4a3122;
+  --color-rose: #dba3a0;
+  --color-rose-dark: #c47f7d;
+  --color-rose-light: #f0cac8;
+  --color-green: #7d8b64;
+  --color-green-dark: #5e6a49;
+  --color-green-light: #a4b088;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--color-accent-light, #d9a29a);
+  color: #17140f;
+}
+
+.font-serif-display {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 300;
+  font-variation-settings: "SOFT" 30, "WONK" 0, "opsz" 72;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.font-script {
+  font-family: var(--font-lobster-two), "Brush Script MT", cursive;
+  letter-spacing: 0.01em;
+}
+
+/* Titre héro : plus lisible que .font-serif-display (300), pensé pour
+   rester net sur un fond vidéo mouvant. */
+.font-serif-hero {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 630;
+  font-variation-settings: "SOFT" 15, "WONK" 0, "opsz" 144;
+  letter-spacing: -0.02em;
+  line-height: 1.03;
+}
+
+.text-hero-shadow {
+  text-shadow: 0 4px 28px rgba(23, 20, 15, 0.16);
+}
+
+/* Phrases clés du titre héro : traitement italique "signature", pour
+   montrer un vrai travail typographique plutôt qu'un texte générique. */
+.font-serif-hero-accent {
+  font-style: italic;
+  font-variation-settings: "SOFT" 65, "WONK" 1, "opsz" 90;
+}
+
+.font-serif-display em,
+.font-serif-display .swash {
+  font-style: italic;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 18;
+}
+
+/* Effet duotone décalé façon impression seventies */
+.text-retro-shadow {
+  text-shadow:
+    0.05em 0.06em 0 var(--color-rose),
+    0.09em 0.11em 0 var(--color-green);
+}
+
+@keyframes blob-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(4%, 6%) scale(1.08);
+  }
+  66% {
+    transform: translate(-3%, -4%) scale(0.95);
+  }
+}
+
+.animate-blob {
+  animation: blob-float 14s ease-in-out infinite;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-scroll 28s linear infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-1%, -2%); }
+  30% { transform: translate(2%, 1%); }
+  50% { transform: translate(-1%, 2%); }
+  70% { transform: translate(1%, -1%); }
+  90% { transform: translate(-2%, 1%); }
+}
+
+/* Finitions 3D : ombres superposées pour donner de la profondeur */
+.shadow-3d {
+  box-shadow:
+    0 1px 2px rgba(23, 20, 15, 0.05),
+    0 12px 24px -8px rgba(23, 20, 15, 0.10),
+    0 32px 56px -20px rgba(23, 20, 15, 0.14);
+}
+
+.shadow-3d-hover {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.shadow-3d-hover:hover {
+  box-shadow:
+    0 2px 4px rgba(23, 20, 15, 0.08),
+    0 16px 24px -6px rgba(23, 20, 15, 0.12),
+    0 32px 56px -16px rgba(178, 104, 95, 0.22);
+}
+
+@keyframes shape-float {
+  0%, 100% {
+    transform: translateY(0) rotate(var(--shape-rotate, 0deg));
+  }
+  50% {
+    transform: translateY(-18px) rotate(calc(var(--shape-rotate, 0deg) + 6deg));
+  }
+}
+
+.animate-shape-float {
+  animation: shape-float 6s ease-in-out infinite;
+}
+
+/* Grain de pellicule, très subtil, pour une texture d'affiche imprimée */
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.4s steps(2) infinite;
+}
+
+@keyframes sunburst-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-sunburst {
+  animation: sunburst-spin 60s linear infinite;
 }

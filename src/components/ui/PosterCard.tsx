@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import clsx from "clsx";
 
 export type BlockColor = "beige" | "brown" | "rose" | "green" | "accent";
@@ -41,13 +41,14 @@ export function PosterCard({
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
   const accent = ACCENT_VARS[blockColor];
+  const reduceMotion = useReducedMotion();
 
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
   const springX = useSpring(x, { stiffness: 200, damping: 24 });
   const springY = useSpring(y, { stiffness: 200, damping: 24 });
-  const rotateX = useTransform(springY, [0, 1], [6, -6]);
-  const rotateY = useTransform(springX, [0, 1], [-6, 6]);
+  const rotateX = useTransform(springY, [0, 1], reduceMotion ? [0, 0] : [6, -6]);
+  const rotateY = useTransform(springX, [0, 1], reduceMotion ? [0, 0] : [-6, 6]);
   const glowX = useTransform(x, [0, 1], ["0%", "100%"]);
   const glowY = useTransform(y, [0, 1], ["0%", "100%"]);
 
@@ -64,6 +65,8 @@ export function PosterCard({
     setHovered(false);
   }
 
+  const ringSpinning = hovered && !reduceMotion;
+
   return (
     <motion.div
       ref={ref}
@@ -71,18 +74,18 @@ export function PosterCard({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ rotateX, rotateY, transformPerspective: 1200 }}
-      whileHover={{ y: -10, scale: 1.015 }}
+      whileHover={{ y: reduceMotion ? 0 : -10, scale: reduceMotion ? 1 : 1.015 }}
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
       className="group relative h-full overflow-hidden rounded-[28px] p-[1.5px]"
     >
-      {/* Living gradient ring — spins continuously while hovered */}
+      {/* Living gradient ring, spins continuously while hovered (static under reduced motion) */}
       <motion.div
         aria-hidden
         className="absolute inset-[-40%]"
         style={{ background: RING_GRADIENTS[blockColor] }}
-        animate={hovered ? { rotate: 360 } : { rotate: 0 }}
+        animate={{ rotate: ringSpinning ? 360 : 0 }}
         transition={
-          hovered
+          ringSpinning
             ? { duration: 4, repeat: Infinity, ease: "linear" }
             : { duration: 0.5, ease: "easeOut" }
         }

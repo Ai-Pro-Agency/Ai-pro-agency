@@ -175,3 +175,15 @@ body {
 .animate-sunburst {
   animation: sunburst-spin 60s linear infinite;
 }
+
+/* Les boucles décoratives infinies (blob, marquee, grain, sunburst) doivent
+   s'arrêter net pour les visiteurs qui ont demandé moins de mouvement. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob,
+  .animate-marquee,
+  .grain-overlay,
+  .animate-shape-float,
+  .animate-sunburst {
+    animation: none;
+  }
+}

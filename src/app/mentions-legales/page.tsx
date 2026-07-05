@@ -22,7 +22,7 @@ export default function MentionsLegalesPage() {
               Le site AI Pro Agency est édité par Jérôme, entrepreneur
               individuel.
               <br />
-              Contact : {CONTACT.email} — {CONTACT.phone}
+              Contact : {CONTACT.email} / {CONTACT.phone}
               <br />
               Zone d&apos;intervention : {CONTACT.zone}
               <br />

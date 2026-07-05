@@ -16,7 +16,7 @@ export default function CgvPage() {
           Conditions générales de vente
         </h1>
         <p className="mt-3 text-sm text-ink-soft/70">
-          Contenu générique fourni à titre indicatif — à faire valider par un
+          Contenu générique fourni à titre indicatif, à faire valider par un
           professionnel du droit avant mise en ligne définitive.
         </p>
 

@@ -186,8 +186,8 @@ export default function Home() {
                 </p>
               </div>
               <p className="mt-6 text-2xl font-serif-display leading-snug sm:text-3xl">
-                Je viens sur place — votre boutique, votre atelier, votre
-                vitrine — et je prends les photos moi-même.
+                Je viens sur place, dans votre boutique, votre atelier, votre
+                vitrine, et je prends les photos moi-même.
               </p>
               <p className="mt-4 text-lg leading-relaxed text-cream/75">
                 Opticien, artisan, commerçant : la façade, les produits,
@@ -228,7 +228,7 @@ export default function Home() {
           />
           <RevealGroup className="mt-14 grid gap-8 sm:grid-cols-3">
             {SERVICES.map(({ icon: Icon, title, description, color }, i) => (
-              <RevealItem key={title}>
+              <RevealItem key={title} className={i === 1 ? "lg:mt-10" : i === 2 ? "lg:mt-4" : undefined}>
                 <PosterCard rotate={SERVICE_ROTATIONS[i]} blockColor={SERVICE_BLOCKS[i]} className="h-full">
                   <Link href="/services" className="group flex h-full flex-col p-7">
                     <IconBadge

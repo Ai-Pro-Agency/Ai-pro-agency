@@ -35,7 +35,7 @@ export const PACKAGE_ROWS: PackageRow[] = [
   {
     label: "Animations au scroll",
     values: {
-      essentiel: "En option — 250 €",
+      essentiel: "En option (250 €)",
       signature: "Inclus",
       prestige: "Inclus",
     },
@@ -48,15 +48,15 @@ export const PACKAGE_ROWS: PackageRow[] = [
     label: "Vidéo de présentation",
     values: {
       essentiel: "—",
-      signature: "En option — 900 €",
+      signature: "En option (900 €)",
       prestige: "Inclus",
     },
   },
   {
     label: "Signature sonore",
     values: {
-      essentiel: "En option — 200 €",
-      signature: "En option — 200 €",
+      essentiel: "En option (200 €)",
+      signature: "En option (200 €)",
       prestige: "Inclus",
     },
   },
@@ -67,7 +67,7 @@ export const PACKAGE_ROWS: PackageRow[] = [
   {
     label: "Fiche Google Business Profile optimisée",
     values: {
-      essentiel: "En option — 300 €",
+      essentiel: "En option (300 €)",
       signature: "Inclus",
       prestige: "Inclus",
     },

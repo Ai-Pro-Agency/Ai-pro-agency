@@ -37,7 +37,7 @@ const lobsterTwo = Lobster_Two({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "AI Pro Agency — Sites web premium pour artisans et TPE en France",
+    default: "AI Pro Agency : sites web premium pour artisans et TPE en France",
     template: "%s | AI Pro Agency",
   },
   description:
@@ -52,14 +52,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fr_FR",
     siteName: "AI Pro Agency",
-    title: "AI Pro Agency — Sites web premium pour artisans et TPE en France",
+    title: "AI Pro Agency : sites web premium pour artisans et TPE en France",
     description:
       "Un site pro, livré en 5 jours, à un prix clair dès le premier échange. On va à l'essentiel.",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Pro Agency — Sites web premium pour artisans et TPE en France",
+    title: "AI Pro Agency : sites web premium pour artisans et TPE en France",
     description:
       "Un site pro, livré en 5 jours, à un prix clair dès le premier échange.",
   },

@@ -45,7 +45,7 @@ export default function TarifsPage() {
         <Container>
           <Reveal>
             <h2 className="font-serif-display text-2xl text-ink sm:text-3xl">
-              Packages — création du site
+              Packages : création du site
             </h2>
             <SwashUnderline className="mt-1" color="var(--color-rose-dark)" />
             <p className="mt-3 text-ink-soft">
@@ -68,7 +68,7 @@ export default function TarifsPage() {
         <Container>
           <Reveal>
             <h2 className="font-serif-display text-2xl text-ink sm:text-3xl">
-              Abonnements mensuels — après la mise en ligne
+              Abonnements mensuels : après la mise en ligne
             </h2>
             <SwashUnderline className="mt-1" color="var(--color-green-dark)" />
             <p className="mt-3 text-ink-soft">

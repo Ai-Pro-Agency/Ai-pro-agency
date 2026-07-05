@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       from: process.env.CONTACT_FROM_EMAIL ?? "AI Pro Agency <onboarding@resend.dev>",
       to: CONTACT.email,
       replyTo: body.email,
-      subject: `Nouveau message de ${body.name} — ${body.projectType}`,
+      subject: `Nouveau message de ${body.name} (${body.projectType})`,
       text: [
         `Nom : ${body.name}`,
         `Email : ${body.email}`,

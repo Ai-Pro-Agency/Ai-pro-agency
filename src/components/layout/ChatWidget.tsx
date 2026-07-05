@@ -20,7 +20,7 @@ const SUGGESTIONS = [
 const GREETING: ChatMessage = {
   role: "assistant",
   content:
-    "Bonjour ! Je suis l'assistant d'AI Pro Agency 👋 Posez-moi vos questions sur nos tarifs, nos délais ou notre méthode — je réponds en quelques secondes.",
+    "Bonjour ! Je suis l'assistant d'AI Pro Agency 👋 Posez-moi vos questions sur nos tarifs, nos délais ou notre méthode, je réponds en quelques secondes.",
 };
 
 function TypingDots() {

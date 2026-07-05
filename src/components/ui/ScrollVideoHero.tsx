@@ -1,6 +1,8 @@
 "use client";
 
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
 
 export interface ScrollVideoPanel {
@@ -23,6 +25,10 @@ const OFFSETS: Record<string, { x: number; y: number }> = {
   left: { x: 40, y: 0 },
   right: { x: -40, y: 0 },
 };
+
+const LOGO_HOLD_MS = 1400;
+
+type Phase = "loading" | "logo" | "ready";
 
 function pad(num: number, size: number) {
   let s = String(num);
@@ -50,9 +56,10 @@ export function ScrollVideoHero({
   const trackRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const loaderRef = useRef<HTMLDivElement>(null);
-  const barRef = useRef<HTMLDivElement>(null);
   const panelRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const [phase, setPhase] = useState<Phase>("loading");
+  const [loadPercent, setLoadPercent] = useState(0);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -64,12 +71,12 @@ export function ScrollVideoHero({
     const vh = scrollVh || Math.round(frameCount * 2.7);
     track.style.height = reduceMotion ? "auto" : vh + "vh";
 
-    // Sous mouvement réduit : on affiche la dernière image (le "état final"
-    // de la séquence) sans scrubbing, conformément à la règle du site sur
-    // les boucles/animations pilotées par le scroll.
+    // Sous mouvement réduit : pas de générique logo ni de scrubbing, on
+    // affiche directement la dernière image de la séquence (état final),
+    // conformément à la règle du site sur les animations pilotées au scroll.
     if (reduceMotion) {
       const ctx = canvas.getContext("2d");
-      const img = new Image();
+      const img = new window.Image();
       img.src = `${framesPath}${pad(frameCount, padSize)}.${ext}`;
       img.onload = () => {
         if (!ctx) return;
@@ -95,12 +102,16 @@ export function ScrollVideoHero({
         const el = panelRefs.current[p.key];
         if (el) el.style.opacity = "1";
       });
-      loaderRef.current?.remove();
+      // Le résultat de matchMedia() n'est connu qu'après le montage côté
+      // client : ce setState ne peut pas être déplacé hors de l'effet.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPhase("ready");
       return;
     }
 
+    document.body.style.overflow = "hidden";
     let cancelled = false;
-    const cleanupFns: Array<() => void> = [];
+    const cleanupFns: Array<() => void> = [() => (document.body.style.overflow = "")];
 
     const ctx = canvas.getContext("2d");
     const images: HTMLImageElement[] = new Array(frameCount);
@@ -165,14 +176,14 @@ export function ScrollVideoHero({
       let loaded = 0;
       const promises: Promise<void>[] = [];
       for (let i = 0; i < frameCount; i++) {
-        const img = new Image();
+        const img = new window.Image();
         img.src = frameUrl(i);
         images[i] = img;
         promises.push(
           new Promise((resolve) => {
             img.onload = img.onerror = () => {
               loaded++;
-              if (barRef.current) barRef.current.style.width = Math.round((loaded / frameCount) * 100) + "%";
+              setLoadPercent(Math.round((loaded / frameCount) * 100));
               resolve();
             };
           })
@@ -198,10 +209,18 @@ export function ScrollVideoHero({
       await preload();
       if (cancelled) return;
 
-      loaderRef.current?.classList.add("is-loaded");
-      setTimeout(() => loaderRef.current?.remove(), 700);
-
       resizeCanvas();
+      drawFrame(0);
+
+      // Chargement terminé : petit générique logo sur fond noir avant de
+      // révéler la scène. Le scroll reste verrouillé jusqu'à la fin.
+      setPhase("logo");
+      await new Promise((resolve) => setTimeout(resolve, LOGO_HOLD_MS));
+      if (cancelled) return;
+
+      setPhase("ready");
+      document.body.style.overflow = "";
+
       const onResize = () => {
         resizeCanvas();
         drawFrame(state.frame);
@@ -226,7 +245,6 @@ export function ScrollVideoHero({
       cleanupFns.push(() => tween.scrollTrigger?.kill());
       cleanupFns.push(() => tween.kill());
 
-      drawFrame(0);
       updatePanels(0);
       ScrollTrigger.refresh();
 
@@ -250,15 +268,51 @@ export function ScrollVideoHero({
 
   return (
     <div ref={trackRef} className="scroll-video-track relative w-full">
-      <div
-        ref={loaderRef}
-        className="scroll-video-loader fixed inset-0 z-[100] flex flex-col items-center justify-center gap-4 bg-ink transition-opacity duration-700"
-      >
-        <span className="text-xs font-semibold uppercase tracking-widest text-cream">Chargement</span>
-        <div className="h-[2px] w-56 overflow-hidden bg-cream/15">
-          <div ref={barRef} className="h-full w-0 bg-accent transition-[width] duration-150" />
-        </div>
-      </div>
+      <AnimatePresence>
+        {phase === "loading" && (
+          <motion.div
+            key="loader"
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-4 bg-ink"
+          >
+            <span className="text-xs font-semibold uppercase tracking-widest text-cream">Chargement</span>
+            <div className="h-[2px] w-56 overflow-hidden bg-cream/15">
+              <motion.div
+                className="h-full bg-accent"
+                animate={{ width: `${loadPercent}%` }}
+                transition={{ duration: 0.15, ease: "linear" }}
+              />
+            </div>
+          </motion.div>
+        )}
+
+        {phase === "logo" && (
+          <motion.div
+            key="logo"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-ink"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Image
+                src="/logo-light.png"
+                alt="AI Pro Agency"
+                width={420}
+                height={286}
+                priority
+                className="block h-40 w-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.4)] sm:h-64"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div ref={sceneRef} className="scroll-video-scene sticky top-0 h-screen w-full overflow-hidden bg-ink">
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />

@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const HERO_FRAME_COUNT = 481;
+const HERO_FRAME_COUNT = 237;
 
 const PANELS: ScrollVideoPanel[] = [
   {
@@ -147,7 +147,7 @@ export default function TestScrollHeroPage() {
         frameCount={HERO_FRAME_COUNT}
         padSize={3}
         ext="jpg"
-        scrollVh={1300}
+        scrollVh={640}
         panels={PANELS}
       />
 

@@ -193,7 +193,7 @@ export default function TestScrollHeroPage() {
                 <PosterCard rotate={ROTATIONS[i]} blockColor={PROMISE_COLORS[i]} className="p-6">
                   <span
                     className={clsx(
-                      "mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full border-2 border-ink text-sm font-bold",
+                      "mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-accent-light/50 text-sm font-bold",
                       DARK_BADGES.includes(PROMISE_COLORS[i]) ? "text-cream" : "text-ink"
                     )}
                     style={{ backgroundColor: `var(--color-${PROMISE_COLORS[i]})` }}

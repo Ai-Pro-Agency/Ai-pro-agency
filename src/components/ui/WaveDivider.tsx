@@ -12,16 +12,21 @@ export function WaveDivider({
   return (
     <div
       aria-hidden
-      className={clsx("pointer-events-none w-full overflow-hidden leading-none", flip && "rotate-180", className)}
+      className={clsx("pointer-events-none relative w-full leading-none", flip && "rotate-180", className)}
     >
+      <div className="h-px w-full" style={{ backgroundColor: color, opacity: 0.4 }} />
       <svg
-        viewBox="0 0 1200 60"
-        preserveAspectRatio="none"
-        className="h-10 w-full sm:h-14"
+        viewBox="0 0 160 12"
+        className="absolute left-1/2 top-1/2 h-3 w-28 -translate-x-1/2 -translate-y-1/2 sm:h-3.5 sm:w-36"
+        fill="none"
       >
-        <path
-          d="M0,30 C150,60 350,0 600,20 C850,40 1050,0 1200,25 L1200,60 L0,60 Z"
-          fill={color}
+        <rect
+          x="76"
+          y="2"
+          width="8"
+          height="8"
+          transform="rotate(45 80 6)"
+          fill="var(--color-accent-light)"
         />
       </svg>
     </div>

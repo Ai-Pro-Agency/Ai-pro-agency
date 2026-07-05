@@ -278,20 +278,20 @@ export function ScrollVideoHero({
               panelRefs.current[p.key] = el;
             }}
             className={clsx(
-              "scroll-video-panel absolute w-[min(32rem,84vw)] px-[8vw] opacity-0",
+              "scroll-video-panel absolute w-[min(36rem,88vw)] opacity-0",
               p.position.vertical === "top" && "top-[14vh]",
               p.position.vertical === "center" && "top-1/2 -translate-y-1/2",
               p.position.vertical === "bottom" && "bottom-[12vh]",
-              p.position.horizontal === "left" && "left-0 text-left",
+              p.position.horizontal === "left" && "left-[6vw] text-left",
               p.position.horizontal === "mid" && "left-1/2 -translate-x-1/2 text-center",
-              p.position.horizontal === "right" && "right-0 left-auto ml-auto text-right"
+              p.position.horizontal === "right" && "right-[6vw] left-auto ml-auto text-right"
             )}
           >
-            <div className="panel__inner rounded-[18px] border border-cream/10 bg-ink/35 px-8 py-7 backdrop-blur-md">
+            <div className="panel__inner rounded-[18px] border border-cream/10 bg-ink/35 px-7 py-6 backdrop-blur-md sm:px-8 sm:py-7">
               <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-widest text-accent-light">
                 {p.eyebrow}
               </span>
-              <h2 className="font-serif-hero text-cream text-[clamp(1.8rem,4vw,3rem)] leading-[1.1]">
+              <h2 className="font-serif-hero text-cream text-[clamp(1.5rem,3.2vw,2.6rem)] leading-[1.15]">
                 {p.title}
               </h2>
               <p className="mt-3 text-cream/80">{p.lede}</p>

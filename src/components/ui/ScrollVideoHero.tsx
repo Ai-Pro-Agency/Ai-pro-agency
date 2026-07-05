@@ -274,16 +274,19 @@ export function ScrollVideoHero({
             key="loader"
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
-            className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-4 bg-ink"
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-5 bg-ink"
           >
-            <span className="text-xs font-semibold uppercase tracking-widest text-cream">Chargement</span>
-            <div className="h-[2px] w-56 overflow-hidden bg-cream/15">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-cream/50">
+              AI Pro Agency
+            </span>
+            <div className="relative h-px w-64 overflow-hidden bg-cream/10">
               <motion.div
-                className="h-full bg-accent"
+                className="h-full bg-gradient-to-r from-transparent via-accent-light to-transparent"
                 animate={{ width: `${loadPercent}%` }}
                 transition={{ duration: 0.15, ease: "linear" }}
               />
             </div>
+            <span className="font-serif-hero text-sm tabular-nums text-accent-light/80">{loadPercent}%</span>
           </motion.div>
         )}
 
@@ -293,13 +296,13 @@ export function ScrollVideoHero({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-ink"
+            transition={{ duration: 0.7 }}
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-ink"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.92 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <Image
                 src="/logo-light.png"
@@ -310,6 +313,20 @@ export function ScrollVideoHero({
                 className="block h-40 w-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.4)] sm:h-64"
               />
             </motion.div>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="h-px w-40 bg-gradient-to-r from-transparent via-accent-light to-transparent sm:w-56"
+            />
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="text-[11px] font-semibold uppercase tracking-[0.35em] text-cream/50"
+            >
+              Sites web premium
+            </motion.span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -321,8 +338,13 @@ export function ScrollVideoHero({
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "linear-gradient(to top, rgba(23,20,15,0.6), transparent 45%), linear-gradient(to bottom, rgba(23,20,15,0.4), transparent 35%)",
+              "linear-gradient(to top, rgba(21,18,13,0.75), transparent 48%), linear-gradient(to bottom, rgba(21,18,13,0.55), transparent 38%), radial-gradient(120% 90% at 50% 100%, transparent 55%, rgba(21,18,13,0.45) 100%)",
           }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ boxShadow: "inset 0 0 min(18vw,220px) rgba(21,18,13,0.55)" }}
         />
 
         {panels.map((p) => (
@@ -341,14 +363,19 @@ export function ScrollVideoHero({
               p.position.horizontal === "right" && "right-[6vw] left-auto ml-auto text-right"
             )}
           >
-            <div className="panel__inner rounded-[18px] border border-cream/10 bg-ink/35 px-7 py-6 backdrop-blur-md sm:px-8 sm:py-7">
-              <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-widest text-accent-light">
+            <div className="panel__inner relative overflow-hidden rounded-[4px] border border-accent-light/25 bg-ink/40 px-7 py-6 backdrop-blur-lg sm:px-9 sm:py-8">
+              <span
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-light/70 to-transparent"
+              />
+              <span className="mb-4 inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-accent-light">
+                <span className="h-px w-6 bg-accent-light/60" aria-hidden />
                 {p.eyebrow}
               </span>
               <h2 className="font-serif-hero text-cream text-[clamp(1.5rem,3.2vw,2.6rem)] leading-[1.15]">
                 {p.title}
               </h2>
-              <p className="mt-3 text-cream/80">{p.lede}</p>
+              <p className="mt-3 text-cream/70">{p.lede}</p>
             </div>
           </div>
         ))}

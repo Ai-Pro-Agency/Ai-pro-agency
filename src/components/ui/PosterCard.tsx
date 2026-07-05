@@ -6,41 +6,19 @@ import clsx from "clsx";
 
 export type BlockColor = "beige" | "brown" | "rose" | "green" | "accent";
 
-const ACCENT_VARS: Record<BlockColor, string> = {
-  beige: "var(--color-beige-dark)",
-  brown: "var(--color-brown)",
-  rose: "var(--color-rose-dark)",
-  green: "var(--color-green-dark)",
-  accent: "var(--color-accent)",
-};
-
-const RING_GRADIENTS: Record<BlockColor, string> = {
-  beige:
-    "conic-gradient(from 0deg, var(--color-beige-dark), var(--color-accent), var(--color-brown), var(--color-rose), var(--color-beige-dark))",
-  brown:
-    "conic-gradient(from 0deg, var(--color-brown), var(--color-rose-dark), var(--color-accent), var(--color-beige-dark), var(--color-brown))",
-  rose:
-    "conic-gradient(from 0deg, var(--color-rose-dark), var(--color-accent), var(--color-green-dark), var(--color-beige), var(--color-rose-dark))",
-  green:
-    "conic-gradient(from 0deg, var(--color-green-dark), var(--color-beige-dark), var(--color-accent), var(--color-rose), var(--color-green-dark))",
-  accent:
-    "conic-gradient(from 0deg, var(--color-accent), var(--color-rose-dark), var(--color-green-dark), var(--color-beige-dark), var(--color-accent))",
-};
-
 export function PosterCard({
   children,
-  blockColor = "accent",
   className,
 }: {
   children: ReactNode;
   /** @deprecated kept for backward compatibility, no longer applies a static tilt */
   rotate?: number;
+  /** @deprecated card border is now a single gold hairline regardless of color, for a restrained luxury line language */
   blockColor?: BlockColor;
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
-  const accent = ACCENT_VARS[blockColor];
   const reduceMotion = useReducedMotion();
 
   const x = useMotionValue(0.5);
@@ -65,8 +43,6 @@ export function PosterCard({
     setHovered(false);
   }
 
-  const ringSpinning = hovered && !reduceMotion;
-
   return (
     <motion.div
       ref={ref}
@@ -76,41 +52,29 @@ export function PosterCard({
       style={{ rotateX, rotateY, transformPerspective: 1200 }}
       whileHover={{ y: reduceMotion ? 0 : -10, scale: reduceMotion ? 1 : 1.015 }}
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      className="group relative h-full overflow-hidden rounded-[28px] p-[1.5px]"
+      className="group relative h-full overflow-hidden rounded-[28px]"
     >
-      {/* Living gradient ring, spins continuously while hovered (static under reduced motion) */}
-      <motion.div
-        aria-hidden
-        className="absolute inset-[-40%]"
-        style={{ background: RING_GRADIENTS[blockColor] }}
-        animate={{ rotate: ringSpinning ? 360 : 0 }}
-        transition={
-          ringSpinning
-            ? { duration: 4, repeat: Infinity, ease: "linear" }
-            : { duration: 0.5, ease: "easeOut" }
-        }
-      />
-
       <div
         className={clsx(
-          "relative h-full overflow-hidden rounded-[26.5px] border border-ink/5 bg-white transition-shadow duration-300",
+          "relative h-full overflow-hidden rounded-[28px] border bg-gradient-to-b from-white to-[#faf7f0] transition-colors duration-300",
+          hovered ? "border-accent-light/80" : "border-accent-light/35",
           className
         )}
         style={{
           boxShadow:
-            "0 1px 2px rgba(23,20,15,0.05), 0 12px 24px -8px rgba(23,20,15,0.10), 0 32px 56px -20px rgba(23,20,15,0.14)",
+            "0 2px 4px rgba(23,20,15,0.06), 0 16px 32px -10px rgba(23,20,15,0.16), 0 40px 72px -24px rgba(23,20,15,0.22)",
         }}
       >
         <span
           aria-hidden
-          className="absolute inset-x-0 top-0 h-[3px] opacity-60 transition-opacity duration-300 group-hover:opacity-0"
-          style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
+          className="absolute inset-x-0 top-0 opacity-80"
+          style={{ height: "2px", background: "linear-gradient(90deg, transparent, var(--color-accent-light), transparent)" }}
         />
         <motion.div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
-            background: `radial-gradient(380px circle at ${glowX} ${glowY}, color-mix(in srgb, ${accent} 18%, transparent), transparent 65%)`,
+            background: `radial-gradient(380px circle at ${glowX} ${glowY}, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 65%)`,
           }}
         />
         <div className="relative h-full">{children}</div>

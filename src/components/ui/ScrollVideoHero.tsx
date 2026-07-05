@@ -82,6 +82,7 @@ export function ScrollVideoHero({
         if (!ctx) return;
         canvas.width = scene.clientWidth;
         canvas.height = scene.clientHeight;
+        ctx.imageSmoothingQuality = "high";
         const ir = img.naturalWidth / img.naturalHeight;
         const cr = canvas.width / canvas.height;
         let dw, dh, dx, dy;
@@ -127,6 +128,7 @@ export function ScrollVideoHero({
       canvas.width = scene.clientWidth * dpr;
       canvas.height = scene.clientHeight * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.imageSmoothingQuality = "high";
     }
 
     function drawFrame(index: number) {

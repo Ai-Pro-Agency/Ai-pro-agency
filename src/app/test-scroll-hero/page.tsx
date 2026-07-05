@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const HERO_FRAME_COUNT = 237;
+const HERO_FRAME_COUNT = 240;
 
 const PANELS: ScrollVideoPanel[] = [
   {

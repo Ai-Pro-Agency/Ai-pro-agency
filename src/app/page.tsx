@@ -1,23 +1,100 @@
 import Link from "next/link";
 import Image from "next/image";
-import clsx from "clsx";
-import { ArrowRight, Camera, Compass, MessageCircle, Layout, RefreshCcw, Wrench, Sparkles } from "lucide-react";
+import { ArrowRight, Camera, Compass, MessageCircle, Layout, RefreshCcw, Wrench } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { SplitHeading } from "@/components/ui/SplitHeading";
 import { GradientOrbs } from "@/components/ui/GradientOrbs";
 import { Marquee } from "@/components/ui/Marquee";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { IconBadge, BadgeColor } from "@/components/ui/IconBadge";
 import { WaveDivider } from "@/components/ui/WaveDivider";
-import { HeroVideo } from "@/components/ui/HeroVideo";
+import { ScrollVideoHero, ScrollVideoPanel } from "@/components/ui/ScrollVideoHero";
 import { PosterCard, BlockColor } from "@/components/ui/PosterCard";
 import { FloatingFlower } from "@/components/ui/FloatingFlower";
-import { SwashUnderline } from "@/components/ui/SwashUnderline";
 import { CONTACT, whatsappHref } from "@/lib/constants";
 import { DEMO_PROJECTS } from "@/lib/projects";
+
+const HERO_FRAME_COUNT = 240;
+
+const HERO_PANELS: ScrollVideoPanel[] = [
+  {
+    key: "intro",
+    eyebrow: "AI Pro Agency",
+    title: (
+      <>
+        L&apos;agence qui vient{" "}
+        <em className="font-serif-hero-accent text-accent-light">chez vous</em>.
+      </>
+    ),
+    lede: "Sites web premium pour artisans et TPE, partout en France.",
+    revealStart: 0,
+    revealEnd: 0.18,
+    revealFrom: "up",
+    position: { vertical: "bottom", horizontal: "mid" },
+  },
+  {
+    key: "promesse",
+    eyebrow: "La promesse",
+    title: (
+      <>
+        Ici, le service client,{" "}
+        <em className="font-serif-hero-accent text-accent-light">c&apos;est moi</em>.
+      </>
+    ),
+    lede: "Je réponds vite, en vrai, sans standard téléphonique.",
+    revealStart: 0.22,
+    revealEnd: 0.45,
+    revealFrom: "right",
+    position: { vertical: "bottom", horizontal: "right" },
+  },
+  {
+    key: "prix",
+    eyebrow: "Le prix",
+    title: (
+      <>
+        Fixe, écrit noir sur blanc,{" "}
+        <em className="font-serif-hero-accent text-accent-light">dès le premier échange</em>.
+      </>
+    ),
+    lede: "Vous payez la moitié avant, la moitié après avoir vu le site.",
+    revealStart: 0.47,
+    revealEnd: 0.78,
+    revealFrom: "left",
+    position: { vertical: "center", horizontal: "right" },
+  },
+  {
+    key: "delai",
+    eyebrow: "Le délai",
+    title: (
+      <>
+        Cinq jours pour un site{" "}
+        <em className="font-serif-hero-accent text-accent-light">vitrine</em>.
+      </>
+    ),
+    lede: "Découverte terrain, shooting photo, mise en ligne.",
+    revealStart: 0.8,
+    revealEnd: 0.9,
+    revealFrom: "down",
+    position: { vertical: "top", horizontal: "right" },
+  },
+  {
+    key: "final",
+    eyebrow: "AI Pro Agency",
+    title: (
+      <>
+        Un site qui vous ressemble,{" "}
+        <em className="font-serif-hero-accent text-accent-light">vraiment</em>.
+      </>
+    ),
+    lede: "Défilez encore pour découvrir notre approche.",
+    revealStart: 0.9,
+    revealEnd: 1,
+    revealFrom: "up",
+    position: { vertical: "bottom", horizontal: "mid" },
+  },
+];
 
 const PROMISES = [
   "Ici, le service client, c'est moi. Je réponds vite.",
@@ -26,8 +103,6 @@ const PROMISES = [
   "Vous payez la moitié avant, la moitié après avoir vu le site. Simple et équitable.",
 ];
 
-const PROMISE_COLORS: BlockColor[] = ["rose", "green", "beige", "brown"];
-const DARK_BADGES: BlockColor[] = ["brown", "green"];
 const ROTATIONS = [-2, 1.5, -1.5, 2];
 
 const SERVICES: { icon: typeof Layout; title: string; description: string; color: BadgeColor }[] = [
@@ -72,43 +147,15 @@ const STATS = [
 export default function Home() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-ink/10">
-        <HeroVideo />
-        <Container className="relative py-24 sm:py-32">
-          <div className="max-w-3xl">
-            <Reveal y={12}>
-              <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-ink/5 px-4 py-1.5 text-sm font-semibold text-ink-soft">
-                <Sparkles size={14} className="text-accent-dark" />
-                Sites web premium, partout en France
-              </p>
-            </Reveal>
-            <SplitHeading
-              text="L'agence web qui vient <accent>chez vous</accent>, qui répond <accent>en vrai</accent>, et qui tient <accent>ses prix</accent>."
-              className="text-hero-shadow font-serif-hero text-4xl leading-[1.1] tracking-tight text-ink sm:text-5xl lg:text-6xl"
-            />
-            <SwashUnderline className="mt-2" delay={0.5} />
-            <Reveal delay={0.3}>
-              <p className="font-script mt-6 max-w-xl text-2xl leading-relaxed text-ink-soft sm:text-3xl">
-                Un site pro, livré en <span className="text-accent-dark">5 jours</span>, à un prix clair dès le premier
-                échange. On va à l&apos;essentiel.
-              </p>
-            </Reveal>
-            <Reveal delay={0.4}>
-              <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-                <Button href="/tarifs" variant="primary">
-                  Voir le prix
-                  <ArrowRight size={18} />
-                </Button>
-                <Button href={whatsappHref()} variant="secondary">
-                  <MessageCircle size={18} />
-                  Écrire sur WhatsApp
-                </Button>
-              </div>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
+      {/* Hero scroll-driven video */}
+      <ScrollVideoHero
+        framesPath="/hero-frames/"
+        frameCount={HERO_FRAME_COUNT}
+        padSize={3}
+        ext="jpg"
+        scrollVh={640}
+        panels={HERO_PANELS}
+      />
 
       <Marquee
         items={[
@@ -148,20 +195,14 @@ export default function Home() {
             title="Quatre engagements, aucune surprise."
             swashColor="var(--color-rose-dark)"
           />
-          <RevealGroup className="mt-14 grid gap-8 sm:grid-cols-2">
+          <RevealGroup className="mt-14 grid gap-10 sm:grid-cols-2">
             {PROMISES.map((text, i) => (
               <RevealItem key={text}>
-                <PosterCard rotate={ROTATIONS[i]} blockColor={PROMISE_COLORS[i]} className="p-6">
-                  <span
-                    className={clsx(
-                      "mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-accent-light/50 text-sm font-bold",
-                      DARK_BADGES.includes(PROMISE_COLORS[i]) ? "text-cream" : "text-ink"
-                    )}
-                    style={{ backgroundColor: `var(--color-${PROMISE_COLORS[i]})` }}
-                  >
+                <PosterCard rotate={ROTATIONS[i]} className="p-9">
+                  <span className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-ink/[0.04] text-sm font-bold text-accent-dark ring-1 ring-inset ring-accent/40">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <p className="text-lg font-medium leading-relaxed text-ink">
+                  <p className="text-xl font-medium leading-relaxed text-ink">
                     {text}
                   </p>
                 </PosterCard>
@@ -226,21 +267,22 @@ export default function Home() {
             title="Trois façons de faire avancer votre site."
             swashColor="var(--color-green-dark)"
           />
-          <RevealGroup className="mt-14 grid gap-8 sm:grid-cols-3">
+          <RevealGroup className="mt-14 grid gap-10 sm:grid-cols-3">
             {SERVICES.map(({ icon: Icon, title, description, color }, i) => (
-              <RevealItem key={title} className={i === 1 ? "lg:mt-10" : i === 2 ? "lg:mt-4" : undefined}>
+              <RevealItem key={title}>
                 <PosterCard rotate={SERVICE_ROTATIONS[i]} blockColor={SERVICE_BLOCKS[i]} className="h-full">
-                  <Link href="/services" className="group flex h-full flex-col p-7">
+                  <Link href="/services" className="group flex h-full flex-col p-9">
                     <IconBadge
                       icon={Icon}
                       color={color}
+                      size={28}
                       className="w-fit transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
                     />
-                    <p className="mt-5 font-serif-display text-xl text-ink">
+                    <p className="mt-6 font-serif-display text-2xl text-ink">
                       {title}
                     </p>
-                    <p className="mt-2 flex-1 text-ink-soft">{description}</p>
-                    <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark">
+                    <p className="mt-3 flex-1 text-lg text-ink-soft">{description}</p>
+                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark">
                       En savoir plus
                       <ArrowRight
                         size={16}
@@ -270,13 +312,13 @@ export default function Home() {
               <RevealItem key={project.slug}>
                 <PosterCard rotate={PROJECT_ROTATIONS[i]} blockColor={PROJECT_BLOCKS[i]} className="overflow-hidden">
                   {project.image ? (
-                    <div className="relative h-64 w-full overflow-hidden sm:h-80">
+                    <div className="relative h-64 w-full overflow-hidden bg-ink sm:h-80">
                       <Image
                         src={project.image}
                         alt={project.name}
                         fill
                         sizes="(min-width: 1024px) 50vw, 100vw"
-                        className="object-cover"
+                        className="object-contain"
                       />
                     </div>
                   ) : (
@@ -285,7 +327,7 @@ export default function Home() {
                       style={{ background: `linear-gradient(135deg, ${project.color}, ${PROJECT_GRADIENT_ENDS[i % PROJECT_GRADIENT_ENDS.length]})` }}
                     />
                   )}
-                  <div className="p-8">
+                  <div className="p-9">
                     <p className="text-xs font-semibold uppercase tracking-widest text-accent-dark">
                       {project.isDemo ? "Projet démonstration" : "Client réel"} · {project.sector}
                     </p>

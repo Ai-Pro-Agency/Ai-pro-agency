@@ -17,8 +17,8 @@ const variantClasses: Record<Variant, string> = {
 };
 
 const variantLipStyle: Record<Variant, CSSProperties | undefined> = {
-  primary: { boxShadow: "0 4px 0 0 var(--color-brown-dark)" },
-  secondary: { boxShadow: "0 4px 0 0 var(--color-accent-dark)" },
+  primary: { boxShadow: "0 1px 2px rgba(23,20,15,0.08), 0 10px 24px -12px rgba(23,20,15,0.35)" },
+  secondary: { boxShadow: "0 1px 2px rgba(23,20,15,0.08), 0 10px 24px -12px rgba(122,92,38,0.35)" },
   ghost: undefined,
 };
 

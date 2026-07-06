@@ -175,23 +175,33 @@ export function ScrollVideoHero({
     }
 
     function preload() {
+      // Kick off every frame request up front (the browser queues/multiplexes
+      // them), but only block reveal on an early slice — the rest keep
+      // downloading in the background. drawFrame() already no-ops on a frame
+      // that hasn't arrived yet, so a fast scroll just holds the last drawn
+      // frame for an instant instead of erroring.
       let loaded = 0;
-      const promises: Promise<void>[] = [];
+      const priorityCount = Math.min(frameCount, Math.max(24, Math.round(frameCount * 0.12)));
+      let priorityLoaded = 0;
+      let resolvePriority: () => void;
+      const priorityPromise = new Promise<void>((resolve) => {
+        resolvePriority = resolve;
+      });
+
       for (let i = 0; i < frameCount; i++) {
         const img = new window.Image();
         img.src = frameUrl(i);
         images[i] = img;
-        promises.push(
-          new Promise((resolve) => {
-            img.onload = img.onerror = () => {
-              loaded++;
-              setLoadPercent(Math.round((loaded / frameCount) * 100));
-              resolve();
-            };
-          })
-        );
+        img.onload = img.onerror = () => {
+          loaded++;
+          setLoadPercent(Math.round((loaded / frameCount) * 100));
+          if (i < priorityCount) {
+            priorityLoaded++;
+            if (priorityLoaded >= priorityCount) resolvePriority();
+          }
+        };
       }
-      return Promise.all(promises);
+      return priorityPromise;
     }
 
     async function run() {

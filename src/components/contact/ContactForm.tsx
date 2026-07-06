@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { API_BASE } from "@/lib/constants";
 
 const PROJECT_TYPES = [
   "Site vitrine",
@@ -33,7 +34,7 @@ export function ContactForm() {
     };
 
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(`${API_BASE}/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

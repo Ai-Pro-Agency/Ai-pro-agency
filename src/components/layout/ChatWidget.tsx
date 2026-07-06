@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, X, Send } from "lucide-react";
-import { whatsappHref } from "@/lib/constants";
+import { whatsappHref, API_BASE } from "@/lib/constants";
 import { SparkleFlower } from "@/components/icons/SparkleFlower";
 
 interface ChatMessage {
@@ -63,7 +63,7 @@ export function ChatWidget() {
     const history = nextMessages.slice(1);
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch(`${API_BASE}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: history }),

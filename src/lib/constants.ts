@@ -1,6 +1,11 @@
 export const SITE_URL = "https://www.ai-pro-agency.com";
 export const SITE_NAME = "AI Pro Agency";
 
+// Empty by default (relative fetch, works on Vercel where the API routes are
+// co-hosted). Overridden at build time for the static export package, whose
+// API routes have no server to run on.
+export const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "";
+
 export const CONTACT = {
   phone: "06 46 01 00 04",
   phoneHref: "tel:+33646010004",

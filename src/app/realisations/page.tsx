@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Réalisations : sites artisans, indépendants et TPE en France",
   description:
     "Nos réalisations client et quelques projets démonstration, pour montrer l'étendue de notre approche.",
+  alternates: { canonical: "/realisations" },
 };
 
 export default function RealisationsPage() {
@@ -18,6 +19,7 @@ export default function RealisationsPage() {
       <FloatingFlower className="right-10 top-8 hidden sm:block" size={42} duration={8} />
       <Container className="relative">
         <SectionHeading
+          as="h1"
           eyebrow="Réalisations"
           title="Un aperçu de ce qu'on construit ensemble."
           description="Un vrai projet client, complété par quelques projets démonstration conçus pour montrer notre méthode et notre niveau d'exigence."

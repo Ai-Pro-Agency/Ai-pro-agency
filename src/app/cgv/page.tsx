@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Conditions générales de vente",
   description: "Conditions générales de vente d'AI Pro Agency.",
   robots: { index: true, follow: true },
+  alternates: { canonical: "/cgv" },
 };
 
 export default function CgvPage() {

@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Mentions légales",
   description: "Mentions légales du site AI Pro Agency.",
   robots: { index: true, follow: true },
+  alternates: { canonical: "/mentions-legales" },
 };
 
 export default function MentionsLegalesPage() {

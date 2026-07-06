@@ -24,10 +24,11 @@ const HERO_PANELS: ScrollVideoPanel[] = [
     eyebrow: "AI Pro Agency",
     title: (
       <>
-        L&apos;agence qui vient{" "}
+        L&apos;agence web qui vient{" "}
         <em className="font-serif-hero-accent text-accent-light">chez vous</em>.
       </>
     ),
+    titleAs: "h1",
     lede: "Sites web premium pour artisans et TPE, partout en France.",
     revealStart: 0,
     revealEnd: 0.18,

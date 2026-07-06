@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   title: "À propos de Jérôme, fondateur d'AI Pro Agency en France",
   description:
     "Jérôme, marketing d'abord, web ensuite. Découvrez la méthode derrière AI Pro Agency : Découverte terrain, alignement stratégique, accompagnement humain.",
+  alternates: { canonical: "/a-propos" },
 };
 
 const METHODE: { icon: typeof Compass; title: string; description: string; color: BadgeColor }[] = [

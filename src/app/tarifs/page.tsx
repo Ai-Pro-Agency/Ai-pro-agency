@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   title: "Tarifs site internet artisan et TPE en France",
   description:
     "Des prix fixes, écrits noir sur blanc dès le premier échange : packages de création (1 600 € à partir de 4 000 €) et abonnements de maintenance (79 € à 299 €/mois).",
+  alternates: { canonical: "/tarifs" },
 };
 
 export default function TarifsPage() {
@@ -33,6 +34,7 @@ export default function TarifsPage() {
         <FloatingFlower className="right-10 top-8 hidden sm:block" size={42} duration={8} />
         <Container className="relative">
           <SectionHeading
+            as="h1"
             eyebrow="Tarifs"
             title="Le prix est clair. Toujours."
             description="Trois formules de création, trois formules d'accompagnement. Vous savez exactement ce que vous payez, et pourquoi."

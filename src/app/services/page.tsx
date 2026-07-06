@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Services : création de site, refonte, maintenance en France",
   description:
     "Trois offres claires pour artisans et TPE/PME en France : site vitrine, refonte de site existant, et maintenance mensuelle à 79 €/mois.",
+  alternates: { canonical: "/services" },
 };
 
 const OFFERS: {
@@ -83,6 +84,7 @@ export default function ServicesPage() {
         <FloatingFlower className="right-10 top-8 hidden sm:block" size={42} duration={8} />
         <Container className="relative">
           <SectionHeading
+            as="h1"
             eyebrow="Services"
             title="Trois offres. Un seul niveau d'exigence."
             description="Que vous partiez de zéro, que vous vouliez rafraîchir l'existant, ou que vous cherchiez un partenaire sur la durée, il y a une offre pensée pour vous."

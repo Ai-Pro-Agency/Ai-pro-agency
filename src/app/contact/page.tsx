@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   title: "Contact : devis site internet artisan et TPE en France",
   description:
     "Écrivez, on répond. Vraiment, et vite. Formulaire de contact, WhatsApp, téléphone, ou réservation directe d'un appel découverte gratuit.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {
@@ -24,6 +25,7 @@ export default function ContactPage() {
       <FloatingFlower className="right-10 top-8 hidden sm:block" size={42} duration={8} />
       <Container className="relative">
         <SectionHeading
+          as="h1"
           eyebrow="Contact"
           title="Écrivez, on répond. Vraiment, et vite."
           description="Choisissez le canal qui vous convient : WhatsApp pour aller vite, le formulaire pour poser les bases, ou un appel découverte gratuit pour en discuter de vive voix."

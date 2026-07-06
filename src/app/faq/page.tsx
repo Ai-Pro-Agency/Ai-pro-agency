@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "FAQ : délais, tarifs et fonctionnement en France",
   description:
     "Toutes les réponses sur les délais de livraison, les modifications incluses, le fonctionnement des abonnements, la zone d'intervention et le paiement.",
+  alternates: { canonical: "/faq" },
 };
 
 const FAQ_ITEMS = [
@@ -54,6 +55,7 @@ export default function FaqPage() {
       <FloatingFlower className="right-10 top-8 hidden sm:block" size={42} duration={8} />
       <Container className="relative">
         <SectionHeading
+          as="h1"
           eyebrow="FAQ"
           title="Les questions qu'on nous pose le plus souvent."
         />

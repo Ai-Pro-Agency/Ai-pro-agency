@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   description:
     "Politique de confidentialité et de protection des données d'AI Pro Agency, conforme au RGPD.",
   robots: { index: true, follow: true },
+  alternates: { canonical: "/confidentialite" },
 };
 
 export default function ConfidentialitePage() {

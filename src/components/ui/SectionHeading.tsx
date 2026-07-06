@@ -8,6 +8,7 @@ export function SectionHeading({
   align = "left",
   swashColor = "var(--color-accent)",
   className,
+  as: Heading = "h2",
 }: {
   eyebrow?: string;
   title: string;
@@ -15,6 +16,8 @@ export function SectionHeading({
   align?: "left" | "center";
   swashColor?: string;
   className?: string;
+  /** Page-primary sections should pass "h1" — defaults to "h2" for in-page sections. */
+  as?: "h1" | "h2";
 }) {
   return (
     <div
@@ -29,9 +32,9 @@ export function SectionHeading({
           {eyebrow}
         </p>
       )}
-      <h2 className="font-serif-display text-3xl leading-tight tracking-tight text-ink sm:text-4xl">
+      <Heading className="font-serif-display text-3xl leading-tight tracking-tight text-ink sm:text-4xl">
         {title}
-      </h2>
+      </Heading>
       <SwashUnderline
         color={swashColor}
         className={clsx("mt-2", align === "center" && "mx-auto")}

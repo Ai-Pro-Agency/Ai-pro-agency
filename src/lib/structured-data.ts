@@ -8,6 +8,7 @@ export function localBusinessJsonLd() {
     description:
       "Agence web créant des sites premium pour artisans, indépendants et TPE/PME partout en France.",
     url: SITE_URL,
+    image: `${SITE_URL}/logo-light.png`,
     telephone: CONTACT.phoneHref.replace("tel:", ""),
     email: CONTACT.email,
     areaServed: {

@@ -17,6 +17,8 @@ export interface ScrollVideoPanel {
     vertical: "top" | "center" | "bottom";
     horizontal: "left" | "mid" | "right";
   };
+  /** The panel carrying the page's real headline should pass "h1" — defaults to "h2". */
+  titleAs?: "h1" | "h2";
 }
 
 const OFFSETS: Record<string, { x: number; y: number }> = {
@@ -384,9 +386,14 @@ export function ScrollVideoHero({
                 <span className="h-px w-6 bg-accent-light/60" aria-hidden />
                 {p.eyebrow}
               </span>
-              <h2 className="font-serif-hero text-cream text-[clamp(1.5rem,3.2vw,2.6rem)] leading-[1.15]">
-                {p.title}
-              </h2>
+              {(() => {
+                const TitleTag = p.titleAs ?? "h2";
+                return (
+                  <TitleTag className="font-serif-hero text-cream text-[clamp(1.5rem,3.2vw,2.6rem)] leading-[1.15]">
+                    {p.title}
+                  </TitleTag>
+                );
+              })()}
               <p className="mt-3 text-cream/70">{p.lede}</p>
             </div>
           </div>

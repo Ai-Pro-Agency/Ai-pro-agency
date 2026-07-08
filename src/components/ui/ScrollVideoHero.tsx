@@ -1,8 +1,7 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { ReactNode, useEffect, useRef } from "react";
+import { ChevronDown } from "lucide-react";
 import clsx from "clsx";
 
 export interface ScrollVideoPanel {
@@ -27,10 +26,6 @@ const OFFSETS: Record<string, { x: number; y: number }> = {
   left: { x: 40, y: 0 },
   right: { x: -40, y: 0 },
 };
-
-const LOGO_HOLD_MS = 1400;
-
-type Phase = "loading" | "logo" | "ready";
 
 function pad(num: number, size: number) {
   let s = String(num);
@@ -59,9 +54,7 @@ export function ScrollVideoHero({
   const sceneRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const panelRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
-  const [phase, setPhase] = useState<Phase>("loading");
-  const [loadPercent, setLoadPercent] = useState(0);
+  const scrollCueRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -105,16 +98,14 @@ export function ScrollVideoHero({
         const el = panelRefs.current[p.key];
         if (el) el.style.opacity = "1";
       });
-      // Le résultat de matchMedia() n'est connu qu'après le montage côté
-      // client : ce setState ne peut pas être déplacé hors de l'effet.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setPhase("ready");
+      // No locked scroll-jack under reduced motion — the page just flows
+      // normally below, so the "scroll to continue" cue would be noise.
+      if (scrollCueRef.current) scrollCueRef.current.style.display = "none";
       return;
     }
 
-    document.body.style.overflow = "hidden";
     let cancelled = false;
-    const cleanupFns: Array<() => void> = [() => (document.body.style.overflow = "")];
+    const cleanupFns: Array<() => void> = [];
 
     const ctx = canvas.getContext("2d");
     const images: HTMLImageElement[] = new Array(frameCount);
@@ -176,15 +167,20 @@ export function ScrollVideoHero({
       });
     }
 
+    function updateScrollCue(progress: number) {
+      const el = scrollCueRef.current;
+      if (!el) return;
+      const fadeEnd = 0.06;
+      const opacity = Math.max(0, 1 - progress / fadeEnd);
+      el.style.opacity = String(opacity);
+      el.style.pointerEvents = opacity > 0.1 ? "auto" : "none";
+    }
+
     function loadOne(i: number) {
       return new Promise<void>((resolve) => {
         const img = new window.Image();
         images[i] = img;
-        img.onload = img.onerror = () => {
-          loaded++;
-          setLoadPercent(Math.round((loaded / frameCount) * 100));
-          resolve();
-        };
+        img.onload = img.onerror = () => resolve();
         img.src = frameUrl(i);
       });
     }
@@ -202,31 +198,10 @@ export function ScrollVideoHero({
       );
     }
 
-    let loaded = 0;
-
-    async function preload() {
-      // Loading all frames at once saturates the connection and starves the
-      // ones we actually need first, so cap concurrency: finish an early
-      // slice fast (blocks reveal), then keep loading the rest at a gentler
-      // pace in the background. drawFrame() already no-ops on a frame that
-      // hasn't arrived yet, so a fast scroll just holds the last drawn frame
-      // for an instant instead of erroring.
-      const priorityCount = Math.min(frameCount, Math.max(24, Math.round(frameCount * 0.12)));
-      const priorityIndices = Array.from({ length: priorityCount }, (_, i) => i);
-      const restIndices = Array.from(
-        { length: frameCount - priorityCount },
-        (_, i) => i + priorityCount
-      );
-
-      await loadQueue(priorityIndices, 6);
-      if (!cancelled) loadQueue(restIndices, 4);
-    }
-
     async function run() {
-      const [{ default: gsapMod }, stModule, lenisModule] = await Promise.all([
-        import("gsap"),
-        import("gsap/ScrollTrigger"),
-        import("lenis"),
+      const [[{ default: gsapMod }, stModule, lenisModule]] = await Promise.all([
+        Promise.all([import("gsap"), import("gsap/ScrollTrigger"), import("lenis")]),
+        loadOne(0),
       ]);
       if (cancelled) return;
 
@@ -236,20 +211,14 @@ export function ScrollVideoHero({
 
       gsap.registerPlugin(ScrollTrigger);
 
-      await preload();
-      if (cancelled) return;
-
       resizeCanvas();
       drawFrame(0);
 
-      // Chargement terminé : petit générique logo sur fond noir avant de
-      // révéler la scène. Le scroll reste verrouillé jusqu'à la fin.
-      setPhase("logo");
-      await new Promise((resolve) => setTimeout(resolve, LOGO_HOLD_MS));
-      if (cancelled) return;
-
-      setPhase("ready");
-      document.body.style.overflow = "";
+      // Nothing blocks reveal — the page is interactive immediately, and the
+      // rest of the sequence streams in below at a modest concurrency so it
+      // doesn't compete with anything the page still needs to load.
+      const restIndices = Array.from({ length: frameCount - 1 }, (_, i) => i + 1);
+      loadQueue(restIndices, 5);
 
       const onResize = () => {
         resizeCanvas();
@@ -269,6 +238,7 @@ export function ScrollVideoHero({
           onUpdate: (self) => {
             drawFrame(state.frame);
             updatePanels(self.progress);
+            updateScrollCue(self.progress);
           },
         },
       });
@@ -276,6 +246,7 @@ export function ScrollVideoHero({
       cleanupFns.push(() => tween.kill());
 
       updatePanels(0);
+      updateScrollCue(0);
       ScrollTrigger.refresh();
 
       const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
@@ -298,69 +269,6 @@ export function ScrollVideoHero({
 
   return (
     <div ref={trackRef} className="scroll-video-track relative w-full">
-      <AnimatePresence>
-        {phase === "loading" && (
-          <motion.div
-            key="loader"
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-5 bg-ink"
-          >
-            <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-cream/50">
-              AI Pro Agency
-            </span>
-            <div className="relative h-px w-64 overflow-hidden bg-cream/10">
-              <motion.div
-                className="h-full bg-gradient-to-r from-transparent via-accent-light to-transparent"
-                animate={{ width: `${loadPercent}%` }}
-                transition={{ duration: 0.15, ease: "linear" }}
-              />
-            </div>
-            <span className="font-serif-hero text-sm tabular-nums text-accent-light/80">{loadPercent}%</span>
-          </motion.div>
-        )}
-
-        {phase === "logo" && (
-          <motion.div
-            key="logo"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7 }}
-            className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-ink"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Image
-                src="/logo-light.png"
-                alt="AI Pro Agency"
-                width={420}
-                height={286}
-                priority
-                className="block h-40 w-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.4)] sm:h-64"
-              />
-            </motion.div>
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="h-px w-40 bg-gradient-to-r from-transparent via-accent-light to-transparent sm:w-56"
-            />
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-[11px] font-semibold uppercase tracking-[0.35em] text-cream/50"
-            >
-              Sites web premium
-            </motion.span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <div ref={sceneRef} className="scroll-video-scene sticky top-0 h-screen w-full overflow-hidden bg-ink">
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
         <div
@@ -376,6 +284,17 @@ export function ScrollVideoHero({
           className="pointer-events-none absolute inset-0"
           style={{ boxShadow: "inset 0 0 min(18vw,220px) rgba(21,18,13,0.55)" }}
         />
+
+        <div
+          ref={scrollCueRef}
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-[5vh] flex flex-col items-center gap-2"
+        >
+          <span className="text-[10px] font-semibold uppercase tracking-[0.35em] text-accent-light/80">
+            Scroll
+          </span>
+          <ChevronDown size={20} className="animate-scroll-cue text-accent-light/80" />
+        </div>
 
         {panels.map((p) => (
           <div

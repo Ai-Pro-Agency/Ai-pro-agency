@@ -178,6 +178,16 @@ body {
   animation: sunburst-spin 60s linear infinite;
 }
 
+/* Puce "scroll" du hero cinématique : va-et-vient vertical très discret. */
+@keyframes scroll-cue-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.55; }
+  50% { transform: translateY(7px); opacity: 1; }
+}
+
+.animate-scroll-cue {
+  animation: scroll-cue-bounce 1.8s ease-in-out infinite;
+}
+
 /* Les boucles décoratives infinies (blob, marquee, grain, sunburst) doivent
    s'arrêter net pour les visiteurs qui ont demandé moins de mouvement. */
 @media (prefers-reduced-motion: reduce) {
@@ -185,7 +195,8 @@ body {
   .animate-marquee,
   .grain-overlay,
   .animate-shape-float,
-  .animate-sunburst {
+  .animate-sunburst,
+  .animate-scroll-cue {
     animation: none;
   }
 }

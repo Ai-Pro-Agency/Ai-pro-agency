@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { buildSystemPrompt } from "@/lib/chat-context";
+import { corsHeaders, isRateLimited, clientIp } from "@/lib/api-security";
 
 export const runtime = "nodejs";
 
@@ -8,27 +9,45 @@ interface ChatMessage {
   content: string;
 }
 
+const MESSAGE_CONTENT_MAX = 2000;
+const MESSAGES_ARRAY_MAX = 40;
+
 function isValidMessages(data: unknown): data is ChatMessage[] {
   return (
     Array.isArray(data) &&
     data.length > 0 &&
+    data.length <= MESSAGES_ARRAY_MAX &&
     data.every(
       (m) =>
         m &&
         (m.role === "user" || m.role === "assistant") &&
         typeof m.content === "string" &&
-        m.content.trim().length > 0
+        m.content.trim().length > 0 &&
+        m.content.length <= MESSAGE_CONTENT_MAX
     )
   );
 }
 
+export async function OPTIONS(request: Request) {
+  return new Response(null, { status: 204, headers: corsHeaders(request) });
+}
+
 export async function POST(request: Request) {
+  const cors = corsHeaders(request);
+
+  if (isRateLimited(`chat:${clientIp(request)}`, 20, 10 * 60 * 1000)) {
+    return new Response(JSON.stringify({ error: "Trop de messages. Réessayez dans quelques minutes." }), {
+      status: 429,
+      headers: { "Content-Type": "application/json", ...cors },
+    });
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     console.error("ANTHROPIC_API_KEY manquante : chatbot indisponible.");
     return new Response(
       JSON.stringify({ error: "Le chatbot n'est pas encore configuré." }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: { "Content-Type": "application/json", ...cors } }
     );
   }
 
@@ -38,7 +57,7 @@ export async function POST(request: Request) {
   if (!isValidMessages(messages)) {
     return new Response(JSON.stringify({ error: "Message invalide." }), {
       status: 400,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...cors },
     });
   }
 
@@ -80,6 +99,7 @@ export async function POST(request: Request) {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "no-cache",
+      ...cors,
     },
   });
 }

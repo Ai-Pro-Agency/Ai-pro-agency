@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Compass, Target, HeartHandshake } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
+import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { GradientOrbs } from "@/components/ui/GradientOrbs";
-import { FloatIcon } from "@/components/ui/FloatIcon";
-import { IconBadge, BadgeColor } from "@/components/ui/IconBadge";
 import { SwashUnderline } from "@/components/ui/SwashUnderline";
 import { FounderPhoto } from "@/components/a-propos/FounderPhoto";
+import { Method3DStep } from "@/components/a-propos/Method3DStep";
 import { FloatingFlower } from "@/components/ui/FloatingFlower";
 import { whatsappHref } from "@/lib/constants";
 
@@ -18,25 +17,22 @@ export const metadata: Metadata = {
   alternates: { canonical: "/a-propos" },
 };
 
-const METHODE: { icon: typeof Compass; title: string; description: string; color: BadgeColor }[] = [
+const METHODE = [
   {
     icon: Compass,
     title: "La Découverte terrain",
-    color: "rose",
     description:
       "Je viens chez vous avant de toucher un clavier. Je vois votre atelier, votre boutique, vos clients. C'est là que je comprends ce qui vous rend différent.",
   },
   {
     icon: Target,
     title: "L'alignement stratégique",
-    color: "green",
     description:
       "Le marketing vient avant le design. Votre positionnement, votre ton, votre clientèle : tout ça façonne le site avant même la première maquette.",
   },
   {
     icon: HeartHandshake,
     title: "L'accompagnement humain",
-    color: "beige",
     description:
       "Une fois le site en ligne, je reste. Conseils, ajustements, disponibilité réelle : le travail ne s'arrête pas à la livraison.",
   },
@@ -80,54 +76,64 @@ export default function AProposPage() {
       <section className="relative overflow-hidden py-16 sm:py-20">
         <FloatingFlower className="right-6 top-4 hidden sm:block" size={34} duration={9} />
         <Container>
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <Reveal>
-              <h2 className="font-serif-display text-2xl text-ink sm:text-3xl">
-                Mon parcours
-              </h2>
-              <SwashUnderline className="mt-1" color="var(--color-rose-dark)" />
-              <div className="mt-4 space-y-4 leading-relaxed text-ink-soft">
-                <p>
-                  Avant de créer des sites, j&apos;ai travaillé le
-                  positionnement de marque, l&apos;acquisition et la relation
-                  client pour des entreprises de toutes tailles. J&apos;ai vu
-                  trop de sites web magnifiques qui ne vendaient rien, et trop
-                  de belles entreprises avec un site qui ne leur ressemblait
-                  pas.
-                </p>
-                <p>
-                  AI Pro Agency est né de ce constat simple : un site
-                  performant commence par une vraie compréhension du métier,
-                  pas par un joli template. C&apos;est pour ça que je me
-                  déplace, que je prends les photos moi-même, et que je reste
-                  disponible après la mise en ligne.
-                </p>
-                <p>
-                  Aujourd&apos;hui, j&apos;accompagne des artisans, des
-                  indépendants et des TPE/PME partout en France, avec la même
-                  méthode et la même exigence à chaque projet.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <h2 className="font-serif-display text-2xl text-ink sm:text-3xl">
-                Ma méthode
-              </h2>
-              <SwashUnderline className="mt-1" color="var(--color-green-dark)" />
-              <RevealGroup className="mt-4 space-y-6">
-                {METHODE.map((step) => (
-                  <RevealItem key={step.title} className="flex gap-4">
-                    <FloatIcon>
-                      <IconBadge icon={step.icon} color={step.color} size={22} />
-                    </FloatIcon>
-                    <div>
-                      <p className="font-semibold text-ink">{step.title}</p>
-                      <p className="mt-1 text-ink-soft">{step.description}</p>
-                    </div>
-                  </RevealItem>
-                ))}
-              </RevealGroup>
-            </Reveal>
+          <Reveal className="mx-auto max-w-2xl text-center">
+            <h2 className="font-serif-display text-2xl text-ink sm:text-3xl">
+              Mon parcours
+            </h2>
+            <SwashUnderline className="mx-auto mt-1" color="var(--color-rose-dark)" />
+            <div className="mt-6 space-y-4 text-left leading-relaxed text-ink-soft">
+              <p>
+                Avant de créer des sites, j&apos;ai travaillé le
+                positionnement de marque, l&apos;acquisition et la relation
+                client pour des entreprises de toutes tailles. J&apos;ai vu
+                trop de sites web magnifiques qui ne vendaient rien, et trop
+                de belles entreprises avec un site qui ne leur ressemblait
+                pas.
+              </p>
+              <p>
+                AI Pro Agency est né de ce constat simple : un site
+                performant commence par une vraie compréhension du métier,
+                pas par un joli template. C&apos;est pour ça que je me
+                déplace, que je prends les photos moi-même, et que je reste
+                disponible après la mise en ligne.
+              </p>
+              <p>
+                Aujourd&apos;hui, j&apos;accompagne des artisans, des
+                indépendants et des TPE/PME partout en France, avec la même
+                méthode et la même exigence à chaque projet.
+              </p>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+
+      {/* Ma méthode — vitrine 3D pilotée par le scroll */}
+      <section className="relative overflow-hidden bg-ink py-24 sm:py-32">
+        <GradientOrbs variant="dark" className="opacity-40" />
+        <Container className="relative">
+          <Reveal className="mx-auto max-w-xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-widest text-accent-light">
+              Ma méthode
+            </p>
+            <h2 className="mt-3 font-serif-display text-3xl text-cream sm:text-4xl">
+              Trois étapes, aucun raccourci.
+            </h2>
+            <p className="mt-4 text-cream/70">
+              Faites défiler pour découvrir comment chaque projet prend forme.
+            </p>
+          </Reveal>
+
+          <div className="mt-20 space-y-16 sm:space-y-24">
+            {METHODE.map((step, i) => (
+              <Method3DStep
+                key={step.title}
+                index={i + 1}
+                title={step.title}
+                description={step.description}
+                align={i % 2 === 0 ? "left" : "right"}
+                icon={<step.icon size={26} />}
+              />
+            ))}
           </div>
         </Container>
       </section>

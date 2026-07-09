@@ -1,14 +1,28 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
-import { m } from "framer-motion";
+import { m, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { TiltCard } from "@/components/ui/TiltCard";
 import { SparkleFlower } from "@/components/icons/SparkleFlower";
 import { FloatIcon } from "@/components/ui/FloatIcon";
 
 export function FounderPhoto() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+
+  // Depth parallax as the frame travels through the viewport: it swings in
+  // 3D on its way past rather than just sliding, on top of the existing
+  // cursor tilt from TiltCard.
+  const { scrollYProgress } = useScroll({
+    target: wrapRef,
+    offset: ["start end", "end start"],
+  });
+  const rotateY = useTransform(scrollYProgress, [0, 0.5, 1], reduceMotion ? [0, 0, 0] : [-14, 0, 14]);
+  const translateZ = useTransform(scrollYProgress, [0, 0.5, 1], reduceMotion ? [0, 0, 0] : [-40, 0, -40]);
+
   return (
-    <div className="relative mx-auto max-w-xs sm:max-w-sm">
+    <div ref={wrapRef} className="relative mx-auto max-w-xs sm:max-w-sm" style={{ perspective: 1600 }}>
       {/* Confetti flottant autour du cadre */}
       <FloatIcon delay={0}>
         <SparkleFlower className="absolute -left-6 -top-6 h-9 w-9 drop-shadow-[0_0_6px_rgba(219,163,160,0.5)] sm:h-11 sm:w-11" />
@@ -25,6 +39,7 @@ export function FounderPhoto() {
         animate={{ rotate: -4 }}
         whileHover={{ rotate: 0, scale: 1.02 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        style={{ rotateY, z: translateZ, transformPerspective: 1600 }}
       >
         <TiltCard className="shadow-3d rounded-lg bg-white p-3 pb-9">
           <m.div

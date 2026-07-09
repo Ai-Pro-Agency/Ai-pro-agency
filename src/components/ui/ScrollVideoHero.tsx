@@ -229,6 +229,8 @@ export function ScrollVideoHero({
       window.addEventListener("resize", onResize);
       cleanupFns.push(() => window.removeEventListener("resize", onResize));
 
+      const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+
       const tween = gsap.to(state, {
         frame: frameCount - 1,
         ease: "none",
@@ -242,6 +244,13 @@ export function ScrollVideoHero({
             updatePanels(self.progress);
             updateScrollCue(self.progress);
           },
+          // Lenis's smoothing only earns its keep while scrubbing the hero —
+          // left running for the whole page, it intercepts every scroll
+          // below the fold too and makes the rest of the site feel laggy
+          // for no benefit. Stop it once past the hero, restart if the
+          // visitor scrolls back up into it.
+          onLeave: () => lenis.stop(),
+          onEnterBack: () => lenis.start(),
         },
       });
       cleanupFns.push(() => tween.scrollTrigger?.kill());
@@ -251,7 +260,6 @@ export function ScrollVideoHero({
       updateScrollCue(0);
       ScrollTrigger.refresh();
 
-      const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
       lenis.on("scroll", ScrollTrigger.update);
       const tickerFn = (time: number) => lenis.raf(time * 1000);
       gsap.ticker.add(tickerFn);

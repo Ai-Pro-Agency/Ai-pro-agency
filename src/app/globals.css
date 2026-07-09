@@ -150,32 +150,10 @@ body {
     0 32px 56px -16px rgba(156, 122, 58, 0.24);
 }
 
-@keyframes shape-float {
-  0%, 100% {
-    transform: translateY(0) rotate(var(--shape-rotate, 0deg));
-  }
-  50% {
-    transform: translateY(-18px) rotate(calc(var(--shape-rotate, 0deg) + 6deg));
-  }
-}
-
-.animate-shape-float {
-  animation: shape-float 6s ease-in-out infinite;
-}
-
 /* Grain de pellicule, très subtil, pour une texture d'affiche imprimée */
 .grain-overlay {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain 1.4s steps(2) infinite;
-}
-
-@keyframes sunburst-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.animate-sunburst {
-  animation: sunburst-spin 60s linear infinite;
 }
 
 /* Puce "scroll" du hero cinématique : va-et-vient vertical très discret. */
@@ -188,14 +166,12 @@ body {
   animation: scroll-cue-bounce 1.8s ease-in-out infinite;
 }
 
-/* Les boucles décoratives infinies (blob, marquee, grain, sunburst) doivent
+/* Les boucles décoratives infinies (blob, marquee, grain) doivent
    s'arrêter net pour les visiteurs qui ont demandé moins de mouvement. */
 @media (prefers-reduced-motion: reduce) {
   .animate-blob,
   .animate-marquee,
   .grain-overlay,
-  .animate-shape-float,
-  .animate-sunburst,
   .animate-scroll-cue {
     animation: none;
   }

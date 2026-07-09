@@ -17,7 +17,7 @@ export function Header() {
   return (
     <>
       <TopBanner />
-      <header className="sticky top-0 z-40 border-b border-cream/10 bg-ink/95 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-cream/10 bg-ink">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-2 sm:px-8">
         <Link href="/" aria-label="AI Pro Agency, retour à l'accueil">
           <Logo variant="light" />

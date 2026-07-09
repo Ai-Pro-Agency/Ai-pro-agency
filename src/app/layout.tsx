@@ -7,7 +7,6 @@ import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { ChatWidget } from "@/components/layout/ChatWidget";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
-import { IntroOverlay } from "@/components/layout/IntroOverlay";
 import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { SITE_URL } from "@/lib/constants";
 import { localBusinessJsonLd } from "@/lib/structured-data";
@@ -84,7 +83,6 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd()) }}
         />
         <GrainOverlay />
-        <IntroOverlay />
         <ScrollProgress />
         <Header />
         <main className="flex-1">{children}</main>

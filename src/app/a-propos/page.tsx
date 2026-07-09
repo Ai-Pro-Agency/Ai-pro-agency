@@ -52,7 +52,7 @@ export default function AProposPage() {
                 </p>
               </Reveal>
               <Reveal delay={0.1}>
-                <h1 className="text-retro-shadow mt-3 font-serif-display text-4xl leading-tight text-ink sm:text-5xl">
+                <h1 className="mt-3 font-serif-display text-4xl leading-tight text-ink sm:text-5xl">
                   Jérôme, fondateur d&apos;AI Pro Agency.
                 </h1>
                 <SwashUnderline className="mt-2" />
@@ -66,9 +66,10 @@ export default function AProposPage() {
                 </p>
               </Reveal>
             </div>
-            <Reveal delay={0.15}>
-              <FounderPhoto />
-            </Reveal>
+            {/* FounderPhoto choreographs its own entrance (glow, 3D settle,
+                shine sweep, sparkles) — wrapping it in Reveal would fade the
+                whole thing in from outside and mute that timing. */}
+            <FounderPhoto />
           </div>
         </Container>
       </section>

@@ -86,13 +86,6 @@ body {
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 18;
 }
 
-/* Effet duotone décalé façon impression seventies */
-.text-retro-shadow {
-  text-shadow:
-    0.05em 0.06em 0 var(--color-rose),
-    0.09em 0.11em 0 var(--color-green);
-}
-
 @keyframes blob-float {
   0%, 100% {
     transform: translate(0, 0) scale(1);

@@ -6,9 +6,9 @@ import Image from "next/image";
 import { m } from "framer-motion";
 
 const SESSION_KEY = "aipro-intro-seen";
-const LOAD_DURATION = 1100;
-const HOLD = 250;
-const EXIT_DURATION = 900;
+const LOAD_DURATION = 550;
+const HOLD = 100;
+const EXIT_DURATION = 500;
 
 const easeCurtain = [0.76, 0, 0.24, 1] as const;
 

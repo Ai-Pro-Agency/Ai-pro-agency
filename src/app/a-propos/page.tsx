@@ -58,7 +58,7 @@ export default function AProposPage() {
                 <SwashUnderline className="mt-2" />
               </Reveal>
               <Reveal delay={0.2}>
-                <p className="mt-6 text-lg leading-relaxed text-ink-soft sm:text-xl">
+                <p className="mt-6 text-justify text-lg leading-relaxed text-ink-soft sm:text-xl">
                   J&apos;ai passé plusieurs années à faire du marketing avant de
                   me lancer dans le web. C&apos;est cette différence qui change
                   tout : je ne vends pas un site, je construis un outil qui parle
@@ -82,7 +82,7 @@ export default function AProposPage() {
               Mon parcours
             </h2>
             <SwashUnderline className="mx-auto mt-1" color="var(--color-rose-dark)" />
-            <div className="mt-6 space-y-4 text-left leading-relaxed text-ink-soft">
+            <div className="mt-6 space-y-4 text-justify leading-relaxed text-ink-soft">
               <p>
                 Avant de créer des sites, j&apos;ai travaillé le
                 positionnement de marque, l&apos;acquisition et la relation

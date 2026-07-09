@@ -71,7 +71,7 @@ export function Method3DStep({
               {String(index).padStart(2, "0")}
             </span>
             <p className="mt-2 font-serif-display text-xl text-ink sm:text-2xl">{title}</p>
-            <p className="mt-3 leading-relaxed text-ink-soft">{description}</p>
+            <p className="mt-3 text-justify leading-relaxed text-ink-soft">{description}</p>
           </div>
         </div>
       </m.div>

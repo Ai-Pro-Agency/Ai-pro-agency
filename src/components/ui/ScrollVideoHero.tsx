@@ -214,11 +214,13 @@ export function ScrollVideoHero({
       resizeCanvas();
       drawFrame(0);
 
-      // Nothing blocks reveal — the page is interactive immediately, and the
-      // rest of the sequence streams in below at a modest concurrency so it
-      // doesn't compete with anything the page still needs to load.
+      // Nothing blocks reveal — the page is interactive immediately. Doubling
+      // the frame count doubled how much has to arrive before scrolling
+      // ahead of the download starts looking like skipped/sped-up playback,
+      // so the background queue gets more concurrency to close that gap
+      // faster (still non-blocking — this doesn't delay the above paint).
       const restIndices = Array.from({ length: frameCount - 1 }, (_, i) => i + 1);
-      loadQueue(restIndices, 5);
+      loadQueue(restIndices, 12);
 
       const onResize = () => {
         resizeCanvas();

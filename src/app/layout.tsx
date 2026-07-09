@@ -7,6 +7,7 @@ import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { ChatWidget } from "@/components/layout/ChatWidget";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
+import { IntroOverlay } from "@/components/layout/IntroOverlay";
 import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { MotionProvider } from "@/components/providers/MotionProvider";
 import { SITE_URL } from "@/lib/constants";
@@ -85,6 +86,7 @@ export default function RootLayout({
         />
         <MotionProvider>
           <GrainOverlay />
+          <IntroOverlay />
           <ScrollProgress />
           <Header />
           <main className="flex-1">{children}</main>

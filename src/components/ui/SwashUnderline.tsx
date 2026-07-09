@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import clsx from "clsx";
 
 export function SwashUnderline({
@@ -19,7 +19,7 @@ export function SwashUnderline({
       className={clsx("h-3 w-28 sm:h-3.5 sm:w-36", className)}
       fill="none"
     >
-      <motion.line
+      <m.line
         x1="0"
         y1="6"
         x2="66"
@@ -32,7 +32,7 @@ export function SwashUnderline({
         viewport={{ once: true }}
         transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       />
-      <motion.rect
+      <m.rect
         x="76"
         y="2"
         width="8"
@@ -44,7 +44,7 @@ export function SwashUnderline({
         viewport={{ once: true }}
         transition={{ duration: 0.4, delay: delay + 0.5 }}
       />
-      <motion.line
+      <m.line
         x1="94"
         y1="6"
         x2="160"

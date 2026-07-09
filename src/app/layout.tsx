@@ -8,6 +8,7 @@ import { ChatWidget } from "@/components/layout/ChatWidget";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { GrainOverlay } from "@/components/ui/GrainOverlay";
+import { MotionProvider } from "@/components/providers/MotionProvider";
 import { SITE_URL } from "@/lib/constants";
 import { localBusinessJsonLd } from "@/lib/structured-data";
 
@@ -82,14 +83,16 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd()) }}
         />
-        <GrainOverlay />
-        <ScrollProgress />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <WhatsAppButton />
-        <ChatWidget />
-        <CookieConsent />
+        <MotionProvider>
+          <GrainOverlay />
+          <ScrollProgress />
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <WhatsAppButton />
+          <ChatWidget />
+          <CookieConsent />
+        </MotionProvider>
       </body>
     </html>
   );

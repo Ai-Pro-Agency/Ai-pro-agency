@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface RevealProps {
   children: ReactNode;
@@ -12,7 +12,7 @@ interface RevealProps {
 
 export function Reveal({ children, delay = 0, className, y = 24 }: RevealProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y, scale: 0.94, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-80px" }}
@@ -20,7 +20,7 @@ export function Reveal({ children, delay = 0, className, y = 24 }: RevealProps) 
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -45,7 +45,7 @@ const groupItem = {
 
 export function RevealGroup({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div
+    <m.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}
@@ -53,14 +53,14 @@ export function RevealGroup({ children, className }: { children: ReactNode; clas
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
 export function RevealItem({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div variants={groupItem} className={className}>
+    <m.div variants={groupItem} className={className}>
       {children}
-    </motion.div>
+    </m.div>
   );
 }

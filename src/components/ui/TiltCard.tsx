@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { m, useMotionValue, useSpring, useTransform } from "framer-motion";
 import clsx from "clsx";
 
 export function TiltCard({
@@ -36,7 +36,7 @@ export function TiltCard({
   }
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -45,7 +45,7 @@ export function TiltCard({
       transition={{ type: "spring", stiffness: 200, damping: 20 }}
       className={clsx("group relative", className)}
     >
-      <motion.div
+      <m.div
         aria-hidden
         className="pointer-events-none absolute -inset-px rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
@@ -53,6 +53,6 @@ export function TiltCard({
         }}
       />
       {children}
-    </motion.div>
+    </m.div>
   );
 }

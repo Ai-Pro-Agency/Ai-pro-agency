@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useRef, useState } from "react";
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
+import { m, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import clsx from "clsx";
 
 export type BlockColor = "beige" | "brown" | "rose" | "green" | "accent";
@@ -44,7 +44,7 @@ export function PosterCard({
   }
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       onMouseEnter={() => setHovered(true)}
       onMouseMove={handleMouseMove}
@@ -70,7 +70,7 @@ export function PosterCard({
           className="absolute inset-x-0 top-0 opacity-80"
           style={{ height: "2px", background: "linear-gradient(90deg, transparent, var(--color-accent-light), transparent)" }}
         />
-        <motion.div
+        <m.div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
@@ -79,6 +79,6 @@ export function PosterCard({
         />
         <div className="relative h-full">{children}</div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

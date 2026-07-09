@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { TiltCard } from "@/components/ui/TiltCard";
 import { SparkleFlower } from "@/components/icons/SparkleFlower";
 import { FloatIcon } from "@/components/ui/FloatIcon";
@@ -20,14 +20,14 @@ export function FounderPhoto() {
         <span className="absolute -left-4 bottom-16 h-4 w-4 rounded-full bg-beige-dark shadow-3d" />
       </FloatIcon>
 
-      <motion.div
+      <m.div
         initial={{ rotate: -4 }}
         animate={{ rotate: -4 }}
         whileHover={{ rotate: 0, scale: 1.02 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
       >
         <TiltCard className="shadow-3d rounded-lg bg-white p-3 pb-9">
-          <motion.div
+          <m.div
             className="relative overflow-hidden rounded-sm bg-ink"
             initial={{ clipPath: "inset(0 100% 0 0)" }}
             whileInView={{ clipPath: "inset(0 0% 0 0)" }}
@@ -42,14 +42,14 @@ export function FounderPhoto() {
               className="h-auto w-full object-cover"
               priority
             />
-          </motion.div>
+          </m.div>
           <p className="mt-3 text-center font-serif-display text-sm text-ink-soft">
             Jérôme, fondateur
           </p>
         </TiltCard>
-      </motion.div>
+      </m.div>
 
-      <motion.div
+      <m.div
         initial={{ opacity: 0, scale: 0.6, rotate: -12 }}
         whileInView={{ opacity: 1, scale: 1, rotate: -8 }}
         viewport={{ once: true }}
@@ -62,7 +62,7 @@ export function FounderPhoto() {
             👋 Fondateur
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
 }

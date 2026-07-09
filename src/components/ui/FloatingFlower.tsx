@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import clsx from "clsx";
 import { SparkleFlower } from "@/components/icons/SparkleFlower";
 
@@ -20,7 +20,7 @@ export function FloatingFlower({
   const reduceMotion = useReducedMotion();
 
   return (
-    <motion.div
+    <m.div
       aria-hidden
       className={clsx("pointer-events-none absolute", className)}
       style={{ opacity }}
@@ -28,6 +28,6 @@ export function FloatingFlower({
       transition={{ duration, repeat: Infinity, ease: "easeInOut", delay }}
     >
       <SparkleFlower style={{ width: size, height: size }} />
-    </motion.div>
+    </m.div>
   );
 }

@@ -2,10 +2,10 @@
 
 import { ReactNode, CSSProperties, useRef } from "react";
 import Link from "next/link";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { m, useMotionValue, useSpring } from "framer-motion";
 import clsx from "clsx";
 
-const MotionLink = motion.create(Link);
+const MotionLink = m.create(Link);
 
 type Variant = "primary" | "secondary" | "ghost";
 
@@ -98,7 +98,7 @@ export function Button(props: LinkButtonProps | ClickButtonProps) {
   }
 
   return (
-    <motion.button
+    <m.button
       ref={ref as React.Ref<HTMLButtonElement>}
       type={"type" in props ? props.type ?? "button" : "button"}
       onClick={"onClick" in props ? props.onClick : undefined}
@@ -106,6 +106,6 @@ export function Button(props: LinkButtonProps | ClickButtonProps) {
       {...motionProps}
     >
       {children}
-    </motion.button>
+    </m.button>
   );
 }

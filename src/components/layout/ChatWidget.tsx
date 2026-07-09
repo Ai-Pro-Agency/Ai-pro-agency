@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { MessageSquare, X, Send } from "lucide-react";
 import { whatsappHref, API_BASE } from "@/lib/constants";
 import { SparkleFlower } from "@/components/icons/SparkleFlower";
@@ -27,7 +27,7 @@ function TypingDots() {
   return (
     <span className="flex items-center gap-1 py-1">
       {[0, 1, 2].map((i) => (
-        <motion.span
+        <m.span
           key={i}
           className="h-1.5 w-1.5 rounded-full bg-ink-soft/50"
           animate={{ y: [0, -4, 0] }}
@@ -104,7 +104,7 @@ export function ChatWidget() {
     <div className="fixed bottom-6 left-5 z-50 sm:bottom-8 sm:left-8">
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -126,25 +126,25 @@ export function ChatWidget() {
             </div>
 
             <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
-              {messages.map((m, i) => (
-                <motion.div
+              {messages.map((msg, i) => (
+                <m.div
                   key={i}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25 }}
-                  className={m.role === "user" ? "flex justify-end" : "flex justify-start"}
+                  className={msg.role === "user" ? "flex justify-end" : "flex justify-start"}
                 >
                   <div
                     className={
-                      m.role === "user"
+                      msg.role === "user"
                         ? "max-w-[85%] rounded-2xl rounded-br-sm bg-accent px-3.5 py-2 text-sm leading-relaxed text-ink"
                         : "max-w-[85%] rounded-2xl rounded-bl-sm bg-cream-dark/60 px-3.5 py-2 text-sm leading-relaxed text-ink-soft"
                     }
                   >
-                    {m.content ||
+                    {msg.content ||
                       (isStreaming && i === messages.length - 1 ? <TypingDots /> : "")}
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
 
@@ -193,20 +193,20 @@ export function ChatWidget() {
             >
               Préférez WhatsApp ? Écrivez-nous directement
             </a>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
       <div className="relative">
         {!open && (
-          <motion.span
+          <m.span
             aria-hidden
             className="absolute inset-0 rounded-full bg-accent/50"
             animate={{ scale: [1, 1.5], opacity: [0.6, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
           />
         )}
-        <motion.button
+        <m.button
           aria-label="Ouvrir le chat"
           onClick={() => setOpen((v) => !v)}
           whileHover={{ scale: 1.05 }}
@@ -214,7 +214,7 @@ export function ChatWidget() {
           className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-ink to-brown-dark text-cream shadow-lg shadow-black/20 transition-colors hover:from-accent hover:to-accent-dark hover:text-ink"
         >
           {open ? <X size={24} /> : <MessageSquare size={24} />}
-        </motion.button>
+        </m.button>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import clsx from "clsx";
 import { DEMO_PROJECTS, SECTORS } from "@/lib/projects";
@@ -35,7 +35,7 @@ export function ProjectsGrid() {
             )}
           >
             {sector === s && (
-              <motion.span
+              <m.span
                 layoutId="sector-pill"
                 className="absolute inset-0 rounded-full bg-ink"
                 transition={{ type: "spring", stiffness: 350, damping: 30 }}
@@ -50,7 +50,7 @@ export function ProjectsGrid() {
         <div className="mt-10 grid gap-10 lg:grid-cols-2">
           <AnimatePresence mode="popLayout">
             {filtered.map((project, i) => (
-              <motion.div
+              <m.div
                 key={project.slug}
                 layout
                 initial={{ opacity: 0, y: 20 }}
@@ -104,12 +104,12 @@ export function ProjectsGrid() {
                     )}
                   </div>
                 </PosterCard>
-              </motion.div>
+              </m.div>
             ))}
           </AnimatePresence>
         </div>
       ) : (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="mt-12 rounded-2xl border border-dashed border-ink/20 bg-white/60 px-8 py-16 text-center"
@@ -120,7 +120,7 @@ export function ProjectsGrid() {
           <p className="mt-2 text-ink-soft">
             Le vôtre pourrait bien être le premier.
           </p>
-        </motion.div>
+        </m.div>
       )}
     </div>
   );

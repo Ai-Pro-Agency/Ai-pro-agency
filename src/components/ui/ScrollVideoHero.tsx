@@ -124,10 +124,29 @@ export function ScrollVideoHero({
       ctx.imageSmoothingQuality = "high";
     }
 
+    // On a real connection, hundreds of frames can't finish downloading as
+    // fast as a visitor can scroll past them — see loadOrder() below. If the
+    // exact frame isn't ready yet, search outward for the closest one that
+    // is, so the picture stays roughly in sync with the scrollbar instead of
+    // visibly freezing until the exact frame arrives.
+    const FRAME_SEARCH_RADIUS = 30;
+    function nearestLoadedFrame(target: number) {
+      const exact = images[target];
+      if (exact && exact.complete && exact.naturalWidth > 0) return exact;
+      for (let d = 1; d <= FRAME_SEARCH_RADIUS; d++) {
+        const before = images[target - d];
+        if (before && before.complete && before.naturalWidth > 0) return before;
+        const after = images[target + d];
+        if (after && after.complete && after.naturalWidth > 0) return after;
+      }
+      return null;
+    }
+
     function drawFrame(index: number) {
       if (!canvas || !scene || !ctx) return;
-      const img = images[Math.max(0, Math.min(frameCount - 1, Math.round(index)))];
-      if (!img || !img.complete || img.naturalWidth === 0) return;
+      const target = Math.max(0, Math.min(frameCount - 1, Math.round(index)));
+      const img = nearestLoadedFrame(target);
+      if (!img) return;
       const cw = scene.clientWidth;
       const ch = scene.clientHeight;
       const ir = img.naturalWidth / img.naturalHeight;
@@ -185,6 +204,19 @@ export function ScrollVideoHero({
       });
     }
 
+    // Visits every index in [lo, hi] via binary subdivision (middle first,
+    // then the middle of each half, and so on) instead of lo->hi order. A
+    // real connection can only download a fraction of a large sequence
+    // before the visitor has already scrolled past it, so whatever fraction
+    // *has* landed needs to be spread across the whole timeline — not
+    // clustered at the start — for nearestLoadedFrame() to have something
+    // close by no matter where the scroll position is.
+    function spreadOrder(lo: number, hi: number): number[] {
+      if (lo > hi) return [];
+      const mid = Math.floor((lo + hi) / 2);
+      return [mid, ...spreadOrder(lo, mid - 1), ...spreadOrder(mid + 1, hi)];
+    }
+
     async function loadQueue(indices: number[], concurrency: number) {
       let cursor = 0;
       async function worker() {
@@ -214,12 +246,11 @@ export function ScrollVideoHero({
       resizeCanvas();
       drawFrame(0);
 
-      // Nothing blocks reveal — the page is interactive immediately. Doubling
-      // the frame count doubled how much has to arrive before scrolling
-      // ahead of the download starts looking like skipped/sped-up playback,
-      // so the background queue gets more concurrency to close that gap
-      // faster (still non-blocking — this doesn't delay the above paint).
-      const restIndices = Array.from({ length: frameCount - 1 }, (_, i) => i + 1);
+      // Nothing blocks reveal — the page is interactive immediately, and the
+      // rest load in the background in spread order (see spreadOrder) so
+      // that whatever has landed at any moment is distributed across the
+      // whole sequence rather than clustered at the start.
+      const restIndices = spreadOrder(1, frameCount - 1);
       loadQueue(restIndices, 12);
 
       const onResize = () => {

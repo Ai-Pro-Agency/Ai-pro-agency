@@ -260,7 +260,34 @@ export function ScrollVideoHero({
       window.addEventListener("resize", onResize);
       cleanupFns.push(() => window.removeEventListener("resize", onResize));
 
-      const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+      // Lenis's smoothing only earns its keep while scrubbing the hero — left
+      // running for the whole page, it intercepts every scroll below the
+      // fold too and makes the rest of the site feel laggy for no benefit.
+      // Important: lenis.stop() is NOT "hand back to native scroll" — per
+      // its own source it calls preventDefault() on every wheel/touch event
+      // while stopped and does nothing else, which deadlocks scrolling
+      // entirely instead of releasing it. destroy()/re-instantiate is the
+      // only way to actually toggle this off and on.
+      let lenis: InstanceType<typeof Lenis> | null = null;
+      let tickerFn: ((time: number) => void) | null = null;
+
+      function teardownLenis() {
+        if (tickerFn) gsap.ticker.remove(tickerFn);
+        lenis?.destroy();
+        lenis = null;
+        tickerFn = null;
+      }
+
+      function setupLenis() {
+        if (lenis) return;
+        lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+        lenis.on("scroll", ScrollTrigger.update);
+        tickerFn = (time: number) => lenis?.raf(time * 1000);
+        gsap.ticker.add(tickerFn);
+      }
+
+      setupLenis();
+      gsap.ticker.lagSmoothing(0);
 
       const tween = gsap.to(state, {
         frame: frameCount - 1,
@@ -275,13 +302,8 @@ export function ScrollVideoHero({
             updatePanels(self.progress);
             updateScrollCue(self.progress);
           },
-          // Lenis's smoothing only earns its keep while scrubbing the hero —
-          // left running for the whole page, it intercepts every scroll
-          // below the fold too and makes the rest of the site feel laggy
-          // for no benefit. Stop it once past the hero, restart if the
-          // visitor scrolls back up into it.
-          onLeave: () => lenis.stop(),
-          onEnterBack: () => lenis.start(),
+          onLeave: teardownLenis,
+          onEnterBack: setupLenis,
         },
       });
       cleanupFns.push(() => tween.scrollTrigger?.kill());
@@ -291,12 +313,7 @@ export function ScrollVideoHero({
       updateScrollCue(0);
       ScrollTrigger.refresh();
 
-      lenis.on("scroll", ScrollTrigger.update);
-      const tickerFn = (time: number) => lenis.raf(time * 1000);
-      gsap.ticker.add(tickerFn);
-      gsap.ticker.lagSmoothing(0);
-      cleanupFns.push(() => gsap.ticker.remove(tickerFn));
-      cleanupFns.push(() => lenis.destroy());
+      cleanupFns.push(teardownLenis);
     }
 
     run();

@@ -48,14 +48,15 @@ export function PricingTable({
               <th
                 key={tier}
                 className={clsx(
-                  "relative border-b px-5 py-6 text-left align-bottom",
+                  "relative border-b px-5 text-left align-bottom",
+                  tier === highlightTier ? "pt-10 pb-6" : "py-6",
                   tier === highlightTier
                     ? "border-b-accent/30 bg-gradient-to-b from-accent/10 to-transparent"
                     : "border-ink/10"
                 )}
               >
                 {tier === highlightTier && (
-                  <span className="absolute -top-3.5 left-5 rounded-full bg-ink px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-cream">
+                  <span className="absolute top-3 left-5 rounded-full bg-ink px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-cream">
                     Recommandé
                   </span>
                 )}

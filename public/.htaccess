@@ -1,0 +1,14 @@
+# Next.js static export generates both a flat `route.html` file and a
+# `route/` directory (RSC payload chunks for client-side navigation) for
+# every page. Apache's default DirectorySlash behavior auto-redirects
+# `/route` -> `/route/`, which then hits that directory (no index.html
+# inside it) and returns 403. This serves the matching .html file for
+# both `/route` and `/route/` without changing the visible URL, so a
+# direct visit/refresh/bookmark of any subpage works.
+DirectorySlash Off
+RewriteEngine On
+
+RewriteCond %{REQUEST_URI} ^/(.*[^/])/?$
+RewriteCond %{DOCUMENT_ROOT}/%1.html -f
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ /%1.html [L]

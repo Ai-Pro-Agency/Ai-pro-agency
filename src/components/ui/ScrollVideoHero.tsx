@@ -301,9 +301,17 @@ export function ScrollVideoHero({
             drawFrame(state.frame);
             updatePanels(self.progress);
             updateScrollCue(self.progress);
+            // Toggle Lenis from inside the same scroll-driven tick that feeds
+            // it (rather than the separate onLeave/onEnterBack lifecycle
+            // callbacks), with a small hysteresis band. onLeave/onEnterBack
+            // fire from GSAP's own boundary bookkeeping, which is a step
+            // removed from the scroll event this onUpdate is already
+            // handling — destroying/recreating Lenis from there could razor
+            // past the same tick that's still trying to feed it a scroll
+            // position, producing a momentary stall right at the boundary.
+            if (self.progress >= 1 && lenis) teardownLenis();
+            else if (self.progress < 0.98 && !lenis) setupLenis();
           },
-          onLeave: teardownLenis,
-          onEnterBack: setupLenis,
         },
       });
       cleanupFns.push(() => tween.scrollTrigger?.kill());

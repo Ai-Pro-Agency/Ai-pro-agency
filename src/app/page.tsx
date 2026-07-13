@@ -153,7 +153,7 @@ export default function Home() {
         framesPath="/hero-frames/"
         frameCount={HERO_FRAME_COUNT}
         padSize={4}
-        ext="jpg"
+        ext="webp"
         scrollVh={640}
         panels={HERO_PANELS}
       />

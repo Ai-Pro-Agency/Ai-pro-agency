@@ -10,12 +10,13 @@ import { Marquee } from "@/components/ui/Marquee";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { IconBadge, BadgeColor } from "@/components/ui/IconBadge";
 import { WaveDivider } from "@/components/ui/WaveDivider";
-import { ScrollVideoPanel } from "@/components/ui/ScrollVideoHero";
-import { ScrollVideoHeroVideo } from "@/components/ui/ScrollVideoHeroVideo";
+import { ScrollVideoHero, ScrollVideoPanel } from "@/components/ui/ScrollVideoHero";
 import { PosterCard, BlockColor } from "@/components/ui/PosterCard";
 import { FloatingFlower } from "@/components/ui/FloatingFlower";
 import { CONTACT, whatsappHref } from "@/lib/constants";
 import { DEMO_PROJECTS } from "@/lib/projects";
+
+const HERO_FRAME_COUNT = 477;
 
 const HERO_PANELS: ScrollVideoPanel[] = [
   {
@@ -148,8 +149,11 @@ export default function Home() {
   return (
     <>
       {/* Hero scroll-driven video */}
-      <ScrollVideoHeroVideo
-        src="/hero-eiffel-scrub.mp4"
+      <ScrollVideoHero
+        framesPath="/hero-frames/"
+        frameCount={HERO_FRAME_COUNT}
+        padSize={3}
+        ext="jpg"
         scrollVh={640}
         panels={HERO_PANELS}
       />

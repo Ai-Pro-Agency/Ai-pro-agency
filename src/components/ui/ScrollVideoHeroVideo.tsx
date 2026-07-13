@@ -168,8 +168,24 @@ export function ScrollVideoHeroVideo({
       gsap.registerPlugin(ScrollTrigger);
 
       resizeCanvas();
-      if (video!.readyState >= 1) drawVideoFrame();
-      else video!.addEventListener("loadedmetadata", drawVideoFrame, { once: true });
+      // A single readyState check here can race loadedmetadata on some
+      // browsers (videoWidth isn't guaranteed populated at the exact instant
+      // it fires), leaving the canvas blank until the first scroll-driven
+      // draw — seen on real Chrome even though Playwright's bundled
+      // Chromium didn't reproduce it. Retry on every relevant readiness
+      // event instead of a one-shot check; drawVideoFrame() is idempotent.
+      const tryInitialDraw = () => {
+        if (video!.videoWidth) drawVideoFrame();
+      };
+      video!.addEventListener("loadedmetadata", tryInitialDraw);
+      video!.addEventListener("loadeddata", tryInitialDraw);
+      video!.addEventListener("canplay", tryInitialDraw);
+      cleanupFns.push(() => {
+        video!.removeEventListener("loadedmetadata", tryInitialDraw);
+        video!.removeEventListener("loadeddata", tryInitialDraw);
+        video!.removeEventListener("canplay", tryInitialDraw);
+      });
+      tryInitialDraw();
 
       const onResize = () => {
         resizeCanvas();

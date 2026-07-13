@@ -16,7 +16,7 @@ import { FloatingFlower } from "@/components/ui/FloatingFlower";
 import { CONTACT, whatsappHref } from "@/lib/constants";
 import { DEMO_PROJECTS } from "@/lib/projects";
 
-const HERO_FRAME_COUNT = 953;
+const HERO_FRAME_COUNT = 160;
 
 const HERO_PANELS: ScrollVideoPanel[] = [
   {
@@ -152,7 +152,7 @@ export default function Home() {
       <ScrollVideoHero
         framesPath="/hero-frames/"
         frameCount={HERO_FRAME_COUNT}
-        padSize={4}
+        padSize={3}
         ext="webp"
         scrollVh={640}
         panels={HERO_PANELS}
